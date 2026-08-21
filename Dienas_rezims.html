@@ -265,6 +265,33 @@ h2{font-size:clamp(20px,2.1vw,30px);font-weight:400;letter-spacing:.07em;margin:
 .jaut.personīgs{border-color:#bcd7ef;background:#f7fbff;}
 .jaut .birka{display:inline-block;font-size:13px;font-weight:700;color:#2E74B5;letter-spacing:.03em;margin-bottom:6px;}
 
+/* ---------- 3a. interaktīvais aplis ---------- */
+.apla-paplāte{display:flex;flex-wrap:wrap;gap:8px;background:#f5f8fa;border-radius:14px;padding:12px;margin-bottom:16px;}
+.apla-paplāte .kartīte{width:108px;min-height:88px;padding:8px 10px;font-size:13.5px;}
+.apla-paplāte .kartīte svg{width:34px;height:34px;}
+.apla-paplāte .tukša-ziņa{font-size:15px;color:#8d97a1;padding:8px 4px;}
+.apla-zona{display:flex;justify-content:center;}
+#aplis3{width:100%;max-width:520px;height:auto;}
+#aplis3 path.sektors{cursor:pointer;transition:opacity .12s;}
+#aplis3 path.sektors:hover{opacity:.78;}
+#aplis3 path:focus,#aplis3 path:focus-visible{outline:none;}
+#aplis3 path.sektors:focus-visible{stroke:#111;stroke-width:5;}
+#aplis3 path.sektors.mērķis{stroke:#111;stroke-width:4;}
+
+/* ---------- 3b. plāna sānjosla ---------- */
+.laiks-režģis{display:grid;grid-template-columns:1fr 320px;gap:26px;align-items:start;}
+@media (max-width:1100px){.laiks-režģis{grid-template-columns:1fr;}}
+.plāns-sānos{border:3px solid var(--pelēks);border-radius:16px;padding:14px 16px;}
+.plāns-sānos h3{margin:0 0 4px;font-size:18px;font-weight:400;letter-spacing:.04em;}
+.plāns-sānos .kam{font-size:14px;color:#777;margin:0 0 10px;}
+.plāns-sānos ol{list-style:none;margin:0;padding:0;max-height:430px;overflow-y:auto;}
+.plāns-sānos li{display:flex;align-items:center;gap:9px;font-size:14.5px;padding:3px 0;border-bottom:1px solid #f0f3f6;}
+.plāns-sānos li .l{width:52px;color:#666;font-weight:700;flex-shrink:0;}
+.plāns-sānos li .d{flex:1;}
+.plāns-sānos li.tukša .d{color:#aab4bd;}
+.plāns-sānos .nakts{font-size:14px;color:#555;background:#f5f8fa;border-radius:10px;padding:9px 12px;margin-top:10px;}
+.plāns-sānos .nav-plāna{font-size:15px;color:#8d97a1;}
+
 /* ---------- karjeras izglītības akcents ---------- */
 .karjera{
   margin:26px 0 0;border-left:7px solid var(--valaspriekii);background:#FEF6EE;
@@ -346,80 +373,47 @@ h2{font-size:clamp(20px,2.1vw,30px);font-weight:400;letter-spacing:.07em;margin:
   </div>
 
   <nav class="cilnes" role="tablist">
-    <button role="tab" aria-selected="true" data-p="p1"><span class="nr">1</span>Diennakts aplis</button>
-    <button role="tab" aria-selected="false" data-p="p2"><span class="nr">2</span>Dienas secība</button>
-    <button role="tab" aria-selected="false" data-p="p3"><span class="nr">3</span>24 stundu laiks</button>
-    <button role="tab" aria-selected="false" data-p="p4"><span class="nr">4</span>Mans dienas plāns</button>
-    <button role="tab" aria-selected="false" data-p="p5"><span class="nr">5</span>Cik daudz vajag?</button>
-    <button role="tab" aria-selected="false" data-p="p6"><span class="nr">6</span>Pašpārbaude</button>
+    <button role="tab" aria-selected="true" data-p="p4"><span class="nr">1</span>Mans dienas plāns</button>
+    <button role="tab" aria-selected="false" data-p="p3"><span class="nr">2</span>24 stundu laiks</button>
+    <button role="tab" aria-selected="false" data-p="p5"><span class="nr">3</span>Cik daudz vajag?</button>
+    <button role="tab" aria-selected="false" data-p="p6"><span class="nr">4</span>Pašpārbaude</button>
   </nav>
-
-  <!-- ============ 1 ============ -->
-  <section class="panelis aktīvs" id="p1">
-    <h2>Diennakts aplis</h2>
-    <p class="pamācība">Diennaktī ir 24 stundas. Pieskaries jebkurai stundai aplī un uzzini, kas tajā laikā notiek skolēna dienā.</p>
-    <div class="leģenda" id="leģenda1"></div>
-    <div class="aplis-režģis">
-      <svg id="pulkstenis" viewBox="0 0 520 520" role="img" aria-label="Diennakts aplis ar 24 stundām"></svg>
-      <div class="info-kartīte" id="info1">
-        <p class="tukšs-teksts">Pieskaries kādai stundai aplī →<br>šeit parādīsies, ko dara tajā laikā.</p>
-      </div>
-    </div>
-    <div class="karjera">
-      <svg aria-hidden="true"><use href="#i-karjera"/></svg>
-      <div>
-        <span class="v">KARJERAS IZGLĪTĪBA</span>
-        <span class="p"><b>Prasme: pamanīt, kur paiet mana diena.</b> Katrai profesijai ir sava diennakts kārtība: maiznieks sāk darbu naktī, skolotājs sāk no rīta, frizieris strādā darba dienā, ārsts strādā maiņās, bet digitālā satura autors jeb influenceris visu laiku ir darbā. Kad proti izlasīt savu dienu pa stundām, vari saprast arī to, <b>kāda darba diena tev pašam būtu piemērota</b>.</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ 2 ============ -->
-  <section class="panelis" id="p2">
-    <h2>Dienas secība</h2>
-    <p class="pamācība">Saliec darbus tādā secībā, kā tie notiek dienā. Vienu un to pašu kartīti drīkst likt vairākas reizes — piemēram, skola pirms un pēc pusdienām. Kopā var ielikt līdz 12 kartītēm. Kartīti noņem, pieskaroties tai vēlreiz.</p>
-    <div class="paplāte" id="paplāte2" aria-label="Kartītes"></div>
-    <div class="josla" id="josla2"></div>
-    <div class="rīki">
-      <button class="poga" id="pārbaudīt2">Pārbaudīt</button>
-      <button class="poga klusa" id="jaukt2">Sajaukt no jauna</button>
-    </div>
-    <p class="rezultāts" id="rezultāts2" role="status"></p>
-    <div class="karjera">
-      <svg aria-hidden="true"><use href="#i-karjera"/></svg>
-      <div>
-        <span class="v">KARJERAS IZGLĪTĪBA</span>
-        <span class="p"><b>Prasme: darīt darbus pareizā secībā.</b> Pavārs vispirms sagriež, tad cep. Celtnieks vispirms liek pamatus, tad sienas. Ja secība sajaukta, darbs jāpārtaisa no jauna. <b>Prasme darīt secīgi no „pareizā sākuma”</b> noder katrā profesijā.</span>
-      </div>
-    </div>
-  </section>
 
   <!-- ============ 3 ============ -->
   <section class="panelis" id="p3">
     <h2>24 stundu laiks</h2>
-    <p class="pamācība">Dienā ir tikai 24 stundas. Sadali tās starp visām jomām tā, lai pietiek laika arī miegam! Blakus katrai jomai vari uzrakstīt vai uzzīmēt, ko tieši tur dari.</p>
-    <div class="budžets">
-      <div class="stundu-režģis" id="režģis3" aria-hidden="true"></div>
-      <p class="kopā" id="kopā3"></p>
-      <p class="brīdinājums" id="brīdinājums3" role="status"></p>
-      <div id="jomas3"></div>
+    <p class="pamācība">Izvēlies kartīti no sava plāna un pieskaries stundai aplī — tā tu sadali visas 24 diennakts stundas. Kartīte, kas ielikta nepareizi, pazūd, ja tai pieskaries vēlreiz.</p>
+    <div class="laiks-režģis">
+      <div>
+        <div class="apla-rīki">
+          <div class="apla-paplāte" id="paplāte3"></div>
+        </div>
+        <div class="apla-zona">
+          <svg id="aplis3" viewBox="0 0 520 520" role="img" aria-label="Diennakts aplis — 24 stundas"></svg>
+        </div>
+        <p class="kopā" id="kopā3"></p>
+        <p class="brīdinājums" id="brīdinājums3" role="status"></p>
+        <div id="jomas3"></div>
+      </div>
+      <aside class="plāns-sānos" id="plāns3"></aside>
     </div>
     <div class="rīki">
-      <button class="poga" id="paraugs3">Parādīt ieteicamo dienu</button>
-      <button class="poga klusa" id="notīrīt3">Sākt no jauna</button>
+      <button class="poga" id="pārbaudīt3">Pārbaudīt pēc mana plāna</button>
+      <button class="poga klusa" id="nakts3">Aizpildīt nakti</button>
+      <button class="poga klusa" id="notīrīt3">Notīrīt apli</button>
       <button class="poga klusa" id="dzēstRakstus3">Notīrīt visus ierakstus</button>
     </div>
     <div class="karjera">
       <svg aria-hidden="true"><use href="#i-karjera"/></svg>
       <div>
         <span class="v">KARJERAS IZGLĪTĪBA</span>
-        <span class="p"><b>Prasme: sadalīt laiku starp darbiem.</b> Ikvienā darbā laika ir tikai tik, cik ir, un tas jāsadala starp uzdevumiem. Frizieris zina, cik ilgi prasa katrs klients, būvnieks — cik dienas prasa katrs posms. <b>Kas prot plānot laiku, paspēj vairāk un mazāk steidzas.</b></span>
+        <span class="p"><b>Prasme: sadalīt laiku starp darbiem.</b> Katrai profesijai ir sava diennakts kārtība: maiznieks sāk darbu naktī, skolotājs sāk no rīta, frizieris strādā darba dienā, ārsts strādā maiņās, bet digitālā satura autors jeb influenceris visu laiku ir darbā. Ikvienā darbā laika ir tikai tik, cik ir, un tas jāsadala starp uzdevumiem. <b>Kas prot plānot laiku, paspēj vairāk un mazāk steidzas.</b></span>
       </div>
     </div>
   </section>
 
   <!-- ============ 4 ============ -->
-  <section class="panelis" id="p4">
+  <section class="panelis aktīvs" id="p4">
     <h2>Mans dienas plāns</h2>
     <p class="pamācība">Izvēlies kartīti un ieliec to sev piemērotā laikā. Ja kartīte jānoņem — pieskaries tai vēlreiz. Ieraksti savu vārdu un uzvārdu un saglabā plānu, lai tas paliek klases sarakstā.</p>
     <div class="p4-režģis">
@@ -552,8 +546,8 @@ function iestatitRezimu(ar){
   document.getElementById('r1').setAttribute('aria-pressed', String(!ar));
   document.getElementById('r23').setAttribute('aria-pressed', String(ar));
   document.querySelectorAll('.skaits').forEach(e=>e.classList.toggle('slēpts', !ar));
+  zimetApli();
   zimetKopa();
-  zimetPulksteni();
 }
 document.getElementById('r1').onclick = ()=>iestatitRezimu(false);
 document.getElementById('r23').onclick = ()=>iestatitRezimu(true);
@@ -566,7 +560,7 @@ document.querySelectorAll('nav.cilnes button').forEach(b=>{
     document.querySelectorAll('section.panelis').forEach(s=>s.classList.remove('aktīvs'));
     document.getElementById(b.dataset.p).classList.add('aktīvs');
     /* rakstāmlauki jāpārmēra brīdī, kad cilne kļūst redzama */
-    if(b.dataset.p==='p3') Object.keys(JOMAS).forEach(sagatavotZimeti);
+    if(b.dataset.p==='p3'){ Object.keys(JOMAS).forEach(sagatavotZimeti); zimetPlanuSanos(); zimetPaplati3(); }
     if(b.dataset.p==='p6') zimetJautajumus();
   };
 });
@@ -576,145 +570,101 @@ function zimetLegendu(el){
   el.innerHTML = Object.values(JOMAS).map(j=>
     `<span><i class="punkts" style="background:${j.h}"></i>${j.n}</span>`).join('');
 }
-zimetLegendu(document.getElementById('leģenda1'));
-
-/* ============ 1. DIENNAKTS APLIS ============ */
-function sektors(cx,cy,r1,r2,a1,a2){
-  const p=(a,r)=>[cx+r*Math.cos((a-90)*Math.PI/180), cy+r*Math.sin((a-90)*Math.PI/180)];
-  const [x1,y1]=p(a1,r2),[x2,y2]=p(a2,r2),[x3,y3]=p(a2,r1),[x4,y4]=p(a1,r1);
-  const liels = (a2-a1)>180?1:0;
-  return `M${x1} ${y1}A${r2} ${r2} 0 ${liels} 1 ${x2} ${y2}L${x3} ${y3}A${r1} ${r1} 0 ${liels} 0 ${x4} ${y4}Z`;
-}
-function stundasJoma(h){ return DIENNAKTS.find(d=>h>=d.no && h<d.lidz); }
-
-function zimetPulksteni(){
-  const s = document.getElementById('pulkstenis');
-  const cx=260, cy=260, r2=225, r1=132;
-  let g = '';
-  for(let h=0; h<24; h++){
-    const d = stundasJoma(h);
-    const a1 = h*15, a2 = (h+1)*15;
-    g += `<path d="${sektors(cx,cy,r1,r2,a1,a2)}" fill="${JOMAS[d.joma].h}" stroke="#fff" stroke-width="2" data-h="${h}" tabindex="0" role="button" aria-label="Plkst. ${h}: ${d.nos}"/>`;
-    if(radaSkaitlus){
-      const am=(a1+a2)/2, rr=(r1+r2)/2;
-      const x=cx+rr*Math.cos((am-90)*Math.PI/180), y=cy+rr*Math.sin((am-90)*Math.PI/180);
-      g += `<text x="${x}" y="${y+6}" text-anchor="middle" font-size="19" font-weight="700" fill="${d.joma==='atputa'?'#5a4a00':'#fff'}" pointer-events="none">${h}</text>`;
-    }
-  }
-  g += `<circle cx="${cx}" cy="${cy}" r="${r1-6}" fill="#f5f8fa"/>`;
-  g += `<text x="${cx}" y="${cy-8}" text-anchor="middle" font-size="54" font-weight="700" fill="#2b2b2b">24</text>`;
-  g += `<text x="${cx}" y="${cy+30}" text-anchor="middle" font-size="22" fill="#666">stundas</text>`;
-  s.innerHTML = g;
-  s.querySelectorAll('path').forEach(p=>{
-    const rad = ()=>raditStundu(+p.dataset.h, p);
-    p.addEventListener('click', rad);
-    p.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();rad();} });
-  });
-}
-function raditStundu(h, el){
-  document.querySelectorAll('#pulkstenis path').forEach(p=>p.classList.remove('izvēlēts'));
-  if(el) el.classList.add('izvēlēts');
-  const d = stundasJoma(h);
-  const laiks = radaSkaitlus ? `${String(h).padStart(2,'0')}.00–${String((h+1)%24).padStart(2,'0')}.00` : '';
-  document.getElementById('info1').innerHTML =
-    `<svg class="ikona"><use href="#${d.ik}"/></svg>
-     ${laiks?`<div class="laiks">${laiks}</div>`:''}
-     <div class="nosaukums">${d.nos}</div>
-     <span class="joma" style="background:${JOMAS[d.joma].h};${d.joma==='atputa'?'color:#5a4a00':''}">${JOMAS[d.joma].n}</span>
-     <p>${d.t}</p>`;
-}
-zimetPulksteni();
-
-/* ============ 2. DIENAS SECĪBA ============ */
-/* no/lidz = agrākais un vēlākais dienas posms, kurā darbība ir loģiska */
-const SEC_KARTITES = [
-  {ik:'i-celties',   n:'Pamostos',      no:1,  lidz:1},
-  {ik:'i-brokastis', n:'Brokastis',     no:2,  lidz:2},
-  {ik:'i-skola',     n:'Skola',         no:3,  lidz:5},
-  {ik:'i-pusdienas', n:'Pusdienas',     no:4,  lidz:4},
-  {ik:'i-majasdarbi',n:'Mājas darbi',   no:6,  lidz:7},
-  {ik:'i-sports',    n:'Pulciņš',       no:6,  lidz:8},
-  {ik:'i-saule',     n:'Brīvais laiks', no:6,  lidz:10},
-  {ik:'i-vakarinas', n:'Vakariņas',     no:9,  lidz:9},
-  {ik:'i-gulet',     n:'Eju gulēt',     no:11, lidz:11}
-];
-const SEC_SLOTI = 12;
-let izvēlēta2 = null;
-function kartīte2(i){
-  const d = SEC_KARTITES[i];
-  return `<div class="kartīte" data-i="${i}"><svg><use href="#${d.ik}"/></svg><span>${d.n}</span></div>`;
-}
-function saliktSecibu(){
-  const secība = SEC_KARTITES.map((_,i)=>i).sort(()=>Math.random()-.5);
-  document.getElementById('paplāte2').innerHTML = secība.map(kartīte2).join('');
-  let sl=''; for(let i=0;i<SEC_SLOTI;i++) sl += `<div class="slots" data-s="${i}"><span class="kārta">${i+1}.</span></div>`;
-  document.getElementById('josla2').innerHTML = sl;
-  document.getElementById('rezultāts2').textContent='';
-  izvēlēta2 = null;
-  piesaistit2();
-}
-function piesaistit2(){
-  document.querySelectorAll('#paplāte2 .kartīte').forEach(k=>{
-    k.onclick = ()=>{
-      document.querySelectorAll('#paplāte2 .kartīte').forEach(x=>x.classList.remove('izvēlēta'));
-      if(izvēlēta2 === k){ izvēlēta2 = null; return; }
-      k.classList.add('izvēlēta'); izvēlēta2 = k;
-    };
-  });
-  document.querySelectorAll('#josla2 .slots').forEach(s=>{
-    s.onclick = ()=>{
-      if(!izvēlēta2) return;
-      const esošā = s.querySelector('.kartīte'); if(esošā) esošā.remove();
-      const kop = izvēlēta2.cloneNode(true);
-      kop.classList.remove('izvēlēta');
-      kop.onclick = e=>{ e.stopPropagation(); kop.remove(); notīrītAtzīmes2(); };
-      s.appendChild(kop);
-      izvēlēta2.classList.remove('izvēlēta'); izvēlēta2 = null;
-      notīrītAtzīmes2();
-    };
-  });
-}
-function notīrītAtzīmes2(){
-  document.querySelectorAll('#josla2 .slots').forEach(s=>s.classList.remove('pareizi','nepareizi'));
-  document.getElementById('rezultāts2').textContent='';
-}
-document.getElementById('jaukt2').onclick = saliktSecibu;
-document.getElementById('pārbaudīt2').onclick = ()=>{
-  const sloti = [...document.querySelectorAll('#josla2 .slots')];
-  sloti.forEach(s=>s.classList.remove('pareizi','nepareizi'));
-  const liktie = sloti.filter(s=>s.querySelector('.kartīte'));
-  const r = document.getElementById('rezultāts2');
-  if(!liktie.length){ r.textContent = 'Vispirms ieliec kartītes joslā.'; return; }
-  /* secība ir pareiza, ja katras kartītes dienas posms nav agrāks par iepriekšējo */
-  let posms = 0, kļūda = null;
-  for(const s of liktie){
-    const d = SEC_KARTITES[+s.querySelector('.kartīte').dataset.i];
-    if(d.lidz < posms){ kļūda = s; break; }
-    posms = Math.max(posms, d.no);
-    s.classList.add('pareizi');
-  }
-  if(kļūda){
-    kļūda.classList.add('nepareizi');
-    r.textContent = 'Sarkanā kartīte dienā notiek agrāk nekā tās priekšā liktās — pārliec to tuvāk dienas sākumam.';
-    return;
-  }
-  r.textContent = liktie.length < 6
-    ? `Pagaidām viss pareizi (${liktie.length} kartītes). Ieliec vēl, lai diena būtu pilnīga.`
-    : `✓ Lieliski! Visas ${liktie.length} kartītes ir pareizā secībā.`;
-};
-saliktSecibu();
 
 /* ============ 3. 24 STUNDU LAIKS ============ */
-const stundas3 = {macibas:0, pienakumi:0, hobiji:0, atputa:0, miegs:0};
-const IETEIKUMS = {miegs:10, macibas:7, pienakumi:2, hobiji:3, atputa:2};
+const NAKTS_STUNDAS = 6;                 /* 0.00–6.00 plānā nav redzamas */
+let aplis3 = new Array(24).fill(null);   /* katrai stundai — kartītes indekss */
+let izvēlēta3 = null;
+
+/* --- palīgi --- */
+function sektors(cx,cy,r1,r2,a1,a2){
+  const t=(a,r)=>[cx+r*Math.cos((a-90)*Math.PI/180), cy+r*Math.sin((a-90)*Math.PI/180)];
+  const [x1,y1]=t(a1,r2),[x2,y2]=t(a2,r2),[x3,y3]=t(a2,r1),[x4,y4]=t(a1,r1);
+  const liels=(a2-a1)>180?1:0;
+  return `M${x1} ${y1}A${r2} ${r2} 0 ${liels} 1 ${x2} ${y2}L${x3} ${y3}A${r1} ${r1} 0 ${liels} 0 ${x4} ${y4}Z`;
+}
+function stundas3Skaits(){
+  const s={macibas:0,pienakumi:0,hobiji:0,atputa:0,miegs:0};
+  aplis3.forEach(x=>{ if(x!=null) s[PLANS_KARTITES[x].j]++; });
+  return s;
+}
+function paziņot(t){ document.getElementById('brīdinājums3').textContent = t; }
+
+/* --- kartīšu paplāte: tikai tās kartītes, kas ir bērna plānā --- */
+function zimetPaplati3(){
+  const el=document.getElementById('paplāte3'); if(!el) return;
+  const avots = plānaAvots();
+  let indeksi;
+  if(avots){
+    indeksi = [...new Set(avots.p.filter(x=>x!=null))];
+  } else {
+    indeksi = [];
+  }
+  if(!indeksi.length){
+    el.innerHTML = '<p class="tukša-ziņa">Vispirms saliec savu dienas plānu 1. cilnē — tad šeit parādīsies tieši tās kartītes, ko tu izvēlējies.</p>';
+    izvēlēta3 = null; return;
+  }
+  el.innerHTML = indeksi.map(i=>{
+    const d=PLANS_KARTITES[i];
+    return `<div class="kartīte" data-i="${i}"><svg><use href="#${d.ik}"/></svg><span>${d.n}</span></div>`;
+  }).join('');
+  el.querySelectorAll('.kartīte').forEach(k=>{
+    k.onclick = ()=>{
+      el.querySelectorAll('.kartīte').forEach(x=>x.classList.remove('izvēlēta'));
+      if(izvēlēta3 === +k.dataset.i){ izvēlēta3 = null; return; }
+      k.classList.add('izvēlēta'); izvēlēta3 = +k.dataset.i;
+    };
+  });
+}
+
+/* --- aplis --- */
+function zimetApli(){
+  const s=document.getElementById('aplis3'); if(!s) return;
+  const cx=260, cy=260, r2=225, r1=128;
+  let g='';
+  for(let hh=0; hh<24; hh++){
+    const x=aplis3[hh], d = x!=null ? PLANS_KARTITES[x] : null;
+    const krāsa = d ? JOMAS[d.j].h : '#eef2f6';
+    g += `<path class="sektors" d="${sektors(cx,cy,r1,r2,hh*15,(hh+1)*15)}" fill="${krāsa}" stroke="#fff" stroke-width="2" `
+       + `data-h="${hh}" tabindex="0" role="button" aria-label="Plkst. ${hh}: ${d?d.n:'tukšs'}"/>`;
+    if(radaSkaitlus){
+      const am=hh*15+7.5, rr=(r1+r2)/2;
+      const tx=cx+rr*Math.cos((am-90)*Math.PI/180), ty=cy+rr*Math.sin((am-90)*Math.PI/180);
+      const gaišs = !d || d.j==='atputa';
+      g += `<text x="${tx}" y="${ty+6}" text-anchor="middle" font-size="18" font-weight="700" fill="${gaišs?'#7d8790':'#fff'}" pointer-events="none">${hh}</text>`;
+    }
+  }
+  const aizpildīts = aplis3.filter(x=>x!=null).length;
+  g += `<circle cx="${cx}" cy="${cy}" r="${r1-6}" fill="#f5f8fa"/>`;
+  if(radaSkaitlus){
+    g += `<text x="${cx}" y="${cy-4}" text-anchor="middle" font-size="52" font-weight="700" fill="#2b2b2b">${aizpildīts}</text>`;
+    g += `<text x="${cx}" y="${cy+30}" text-anchor="middle" font-size="20" fill="#666">no 24 stundām</text>`;
+  } else {
+    g += `<text x="${cx}" y="${cy+2}" text-anchor="middle" font-size="24" fill="#666">mana</text>`;
+    g += `<text x="${cx}" y="${cy+32}" text-anchor="middle" font-size="24" fill="#666">diena</text>`;
+  }
+  s.innerHTML=g;
+  s.querySelectorAll('path.sektors').forEach(pt=>{
+    const rīkoties = ()=>{
+      const hh=+pt.dataset.h;
+      if(aplis3[hh]!=null && (izvēlēta3===null || aplis3[hh]===izvēlēta3)){ aplis3[hh]=null; }
+      else if(izvēlēta3!==null){ aplis3[hh]=izvēlēta3; }
+      else { paziņot('Vispirms izvēlies kartīti virs apļa.'); return; }
+      paziņot(''); atjaunotApli();
+    };
+    pt.addEventListener('click', rīkoties);
+    pt.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); rīkoties(); } });
+  });
+}
+function atjaunotApli(){ zimetApli(); zimetKopa(); }
+
+/* --- jomu rindas: skaitļi + rakstāmlauki --- */
 function zimetJomas(){
   document.getElementById('jomas3').innerHTML =
     '<h3>Ko tieši es daru?</h3>' +
     Object.entries(JOMAS).map(([k,j])=>
     `<div class="jomas-rinda">
-       <button class="apaļa" style="background:${j.h};${k==='atputa'?'color:#5a4a00':''}" data-j="${k}" data-d="-1" aria-label="Mazāk: ${j.n}">–</button>
-       <span class="skaits ${radaSkaitlus?'':'slēpts'}" id="sk-${k}">0</span>
-       <button class="apaļa" style="background:${j.h};${k==='atputa'?'color:#5a4a00':''}" data-j="${k}" data-d="1" aria-label="Vairāk: ${j.n}">+</button>
+       <span class="skaits ${radaSkaitlus?'':'slēpts'}" id="sk-${k}" style="color:${j.h}">0</span>
        <span class="nos"><i class="punkts" style="background:${j.h}"></i> ${j.n}</span>
        <span class="raksta-lauks">
          <canvas id="zim-${k}" aria-label="Rakstāmlauks: ${j.n}"></canvas>
@@ -722,26 +672,27 @@ function zimetJomas(){
        </span>
        <button class="dzēst-svītra" data-dz="${k}" title="Notīrīt šo lauku" aria-label="Notīrīt lauku: ${j.n}">✕</button>
      </div>`).join('');
-  document.querySelectorAll('#jomas3 .apaļa').forEach(b=>{
-    b.onclick = ()=>{
-      const k=b.dataset.j, d=+b.dataset.d;
-      const kopā = Object.values(stundas3).reduce((a,b)=>a+b,0);
-      if(d>0 && kopā>=24){ paziņot('Diennaktī vairāk par 24 stundām nav! Kaut kur jāatņem.'); return; }
-      stundas3[k] = Math.max(0, stundas3[k]+d);
-      paziņot('');
-      zimetKopa();
-    };
-  });
   Object.keys(JOMAS).forEach(sagatavotZimeti);
-  document.querySelectorAll('#jomas3 .dzēst-svītra').forEach(b=>{
-    b.onclick = ()=>notīrītZīmējumu(b.dataset.dz);
+  document.querySelectorAll('#jomas3 .dzēst-svītra').forEach(b=>{ b.onclick = ()=>notīrītZīmējumu(b.dataset.dz); });
+}
+function zimetKopa(){
+  const s = stundas3Skaits();
+  Object.keys(JOMAS).forEach(k=>{
+    const e=document.getElementById('sk-'+k);
+    if(e){ e.textContent = s[k]; e.classList.toggle('slēpts', !radaSkaitlus); }
   });
+  const aizpildīts = aplis3.filter(x=>x!=null).length;
+  const e=document.getElementById('kopā3'); if(!e) return;
+  if(radaSkaitlus)
+    e.innerHTML = aizpildīts===24 ? 'Visas 24 stundas sadalītas!' : `Sadalīts: ${aizpildīts} h · <span class="atlikums">atlicis ${24-aizpildīts} h</span>`;
+  else
+    e.innerHTML = aizpildīts===24 ? 'Diena ir pilna!' : 'Aplī vēl ir tukšas vietas.';
+  e.classList.toggle('pilns', aizpildīts===24);
 }
 
-/* --- rakstāmlauki (melna līnija, pirksts / marķieris / pele) --- */
+/* --- rakstāmlauki (melna līnija) --- */
 function sagatavotZimeti(k){
-  const c = document.getElementById('zim-'+k);
-  if(!c) return;
+  const c = document.getElementById('zim-'+k); if(!c) return;
   const mērogs = window.devicePixelRatio || 1;
   const uzstādīt = ()=>{
     const dati = c.width ? c.toDataURL() : null;
@@ -749,69 +700,77 @@ function sagatavotZimeti(k){
     c.height = Math.max(1, Math.round(c.clientHeight * mērogs));
     const t = c.getContext('2d');
     t.scale(mērogs, mērogs);
-    t.lineWidth = 3; t.lineCap = 'round'; t.lineJoin = 'round'; t.strokeStyle = '#111';
-    if(dati){ const a = new Image(); a.onload = ()=>t.drawImage(a, 0, 0, c.clientWidth, c.clientHeight); a.src = dati; }
+    t.lineWidth = 3; t.lineCap='round'; t.lineJoin='round'; t.strokeStyle = '#111';
+    if(dati){ const a=new Image(); a.onload=()=>t.drawImage(a,0,0,c.clientWidth,c.clientHeight); a.src=dati; }
   };
   uzstādīt();
   if(!c.dataset.gatavs){
-    c.dataset.gatavs = '1';
-    let zīmē = false;
-    const t = ()=>c.getContext('2d');
-    const punkts = e=>{ const r = c.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+    c.dataset.gatavs='1';
+    let zīmē=false;
+    const t=()=>c.getContext('2d');
+    const punkts = e=>{ const r=c.getBoundingClientRect(); return [e.clientX-r.left, e.clientY-r.top]; };
     c.addEventListener('pointerdown', e=>{
-      zīmē = true; c.setPointerCapture(e.pointerId);
-      const m = document.getElementById('māj-'+k); if(m) m.style.display = 'none';
-      const [x,y] = punkts(e); const ct = t(); ct.beginPath(); ct.moveTo(x,y); ct.lineTo(x+0.1,y);
-      ct.stroke();
+      zīmē=true; c.setPointerCapture(e.pointerId);
+      const m=document.getElementById('māj-'+k); if(m) m.style.display='none';
+      const [x,y]=punkts(e); const ct=t(); ct.beginPath(); ct.moveTo(x,y); ct.lineTo(x+0.1,y); ct.stroke();
     });
-    c.addEventListener('pointermove', e=>{
-      if(!zīmē) return; e.preventDefault();
-      const [x,y] = punkts(e); const ct = t(); ct.lineTo(x,y); ct.stroke();
-    });
-    ['pointerup','pointercancel','pointerleave'].forEach(n=>c.addEventListener(n, ()=>{ zīmē = false; }));
+    c.addEventListener('pointermove', e=>{ if(!zīmē) return; e.preventDefault();
+      const [x,y]=punkts(e); const ct=t(); ct.lineTo(x,y); ct.stroke(); });
+    ['pointerup','pointercancel','pointerleave'].forEach(n=>c.addEventListener(n, ()=>{ zīmē=false; }));
     window.addEventListener('resize', uzstādīt);
   }
 }
 function notīrītZīmējumu(k){
-  const c = document.getElementById('zim-'+k); if(!c) return;
+  const c=document.getElementById('zim-'+k); if(!c) return;
   c.getContext('2d').clearRect(0,0,c.width,c.height);
-  const m = document.getElementById('māj-'+k); if(m) m.style.display = '';
+  const m=document.getElementById('māj-'+k); if(m) m.style.display='';
 }
-function paziņot(t){ document.getElementById('brīdinājums3').textContent = t; }
-function zimetKopa(){
-  const r = document.getElementById('režģis3');
-  if(!r) return;
-  let kv = [];
-  Object.entries(stundas3).forEach(([k,n])=>{ for(let i=0;i<n;i++) kv.push(JOMAS[k].h); });
-  let html='';
-  for(let i=0;i<24;i++){
-    const gaisa = kv[i]==='#F2C900';
-    html += `<div class="stunda ${kv[i]?'pilna':''}" style="${kv[i]?`background:${kv[i]};border-color:${kv[i]};${gaisa?'color:#5a4a00':''}`:''}">${radaSkaitlus?(i+1):''}</div>`;
+
+/* --- plāns sānos --- */
+function zimetPlanuSanos(){
+  const el = document.getElementById('plāns3'); if(!el) return;
+  const avots = plānaAvots();
+  if(!avots){
+    el.innerHTML = '<h3>Mans dienas plāns</h3><p class="nav-plāna">Plāna vēl nav. Ej uz 1. cilni «Mans dienas plāns», saliec kartītes un tad atgriezies šeit.</p>';
+    return;
   }
-  r.innerHTML = html;
-  Object.keys(stundas3).forEach(k=>{
-    const e = document.getElementById('sk-'+k);
-    if(e){ e.textContent = stundas3[k]; e.classList.toggle('slēpts', !radaSkaitlus); }
-  });
-  const kopā = Object.values(stundas3).reduce((a,b)=>a+b,0);
-  const e = document.getElementById('kopā3');
-  if(radaSkaitlus)
-    e.innerHTML = kopā===24 ? 'Visas 24 stundas sadalītas!' : `Sadalīts: ${kopā} h · <span class="atlikums">atlicis ${24-kopā} h</span>`;
-  else
-    e.innerHTML = kopā===24 ? 'Diena ir pilna!' : 'Aplī vēl ir tukšas vietas.';
-  e.classList.toggle('pilns', kopā===24);
-  if(kopā===24 && stundas3.miegs < 9) paziņot('Diena ir pilna, bet miegam atlikts par maz — vajag 10–11 stundas.');
+  const rindas = LAIKI.map((l,i)=>{
+    const x=avots.p[i], k = x!=null ? PLANS_KARTITES[x] : null;
+    return `<li class="${k?'':'tukša'}"><span class="l">${l}</span>
+      <i class="punkts" style="background:${k?JOMAS[k.j].h:'#e3e8ec'}"></i>
+      <span class="d">${k?k.n:'—'}</span></li>`;
+  }).join('');
+  el.innerHTML = `<h3>Mans dienas plāns</h3>
+    <p class="kam">${avots.v ? avots.v : 'Plāns, kas šobrīd salikts 1. cilnē'}</p>
+    <ol>${rindas}</ol>
+    <p class="nakts">Stundas no plkst. 0.00 līdz 6.00 plānā nav redzamas — tās ir <b>${NAKTS_STUNDAS} nakts stundas</b>, un aplī tās parasti aizpilda ar miegu.</p>`;
 }
-document.getElementById('paraugs3').onclick = ()=>{
-  Object.keys(stundas3).forEach(k=>stundas3[k]=IETEIKUMS[k]);
-  paziņot('Šāda diena ir ieteicama 1.–3. klases skolēnam.');
-  zimetKopa();
+function gaidamaisSadalijums(){
+  const avots = plānaAvots(); if(!avots) return null;
+  const s={macibas:0,pienakumi:0,hobiji:0,atputa:0,miegs:NAKTS_STUNDAS};
+  avots.p.forEach(x=>{ if(x!=null) s[PLANS_KARTITES[x].j]++; });
+  return s;
+}
+document.getElementById('pārbaudīt3').onclick = ()=>{
+  const g = gaidamaisSadalijums();
+  if(!g){ paziņot('Vispirms saliec savu dienas plānu 1. cilnē.'); return; }
+  const s = stundas3Skaits();
+  const kļūdas = Object.keys(JOMAS).filter(k=>s[k] !== g[k]);
+  if(!kļūdas.length){ paziņot('✓ Pareizi! Aplis sakrīt ar tavu dienas plānu.'); return; }
+  const teksts = kļūdas.map(k=>`${JOMAS[k].n} — ${s[k] < g[k] ? 'par maz' : 'par daudz'}`).join(' · ');
+  paziņot(`Vēl nesakrīt: ${teksts}. Salīdzini apli ar plānu malā.`);
 };
-document.getElementById('notīrīt3').onclick = ()=>{
-  Object.keys(stundas3).forEach(k=>stundas3[k]=0); paziņot(''); zimetKopa();
+document.getElementById('nakts3').onclick = ()=>{
+  const gulēt = PLANS_KARTITES.findIndex(k=>k.n==='Guļu');
+  for(let hh=0; hh<NAKTS_STUNDAS; hh++) aplis3[hh] = gulēt;
+  paziņot('Nakts stundas no 0.00 līdz 6.00 aizpildītas ar miegu.');
+  atjaunotApli();
 };
+document.getElementById('notīrīt3').onclick = ()=>{ aplis3 = new Array(24).fill(null); paziņot(''); atjaunotApli(); };
 document.getElementById('dzēstRakstus3').onclick = ()=>{ Object.keys(JOMAS).forEach(notīrītZīmējumu); };
-zimetJomas(); zimetKopa();
+
+zimetJomas(); zimetApli(); zimetKopa();
+/* zimetPaplati3() un zimetPlanuSanos() izsauc skripta beigās — tie izmanto 4. sadaļas datus */
 
 /* ============ 4. MANS PLĀNS ============ */
 const PLANS_KARTITES = [
@@ -935,6 +894,7 @@ document.getElementById('saglabāt4').onclick = ()=>{
   document.getElementById('galva4').textContent = `KO DARA — ${v}`;
   zimetKlasi();
   if(!document.getElementById('salīdz4').hidden) zimetSalidz();
+  zimetPlanuSanos();
 };
 document.getElementById('jauns4').onclick = ()=>{
   aktīvais = -1;
@@ -1156,7 +1116,7 @@ function zimetJautajumus(){
   if(pers.length){
     av.textContent = avots.v
       ? `Divi pirmie jautājumi veidoti no plāna, ko salika ${avots.v}.`
-      : 'Divi pirmie jautājumi veidoti no plāna, kas šobrīd salikts 4. cilnē.';
+      : 'Divi pirmie jautājumi veidoti no plāna, kas šobrīd salikts 1. cilnē.';
     av.classList.add('redzams');
   } else {
     av.classList.remove('redzams'); av.textContent = '';
@@ -1200,6 +1160,9 @@ function zimetJautajumus(){
 }
 document.getElementById('atsākt6').onclick = zimetJautajumus;
 zimetJautajumus();
+
+/* 3. sadaļas daļas, kas izmanto plānu */
+zimetPaplati3(); zimetPlanuSanos();
 </script>
 <div id="drukas-lapa"></div>
 </body>
