@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dienas režīms — interaktīvā planšete 1.–3. klasei</title>
+<style>
+:root{
+  --macibas:#2E74B5;
+  --pienakumi:#3E9C55;
+  --valaspriekii:#F08A24;
+  --atputa:#F2C900;
+  --miegs:#7A5AC8;
+  --lapa:#ffffff;
+  --tinte:#2b2b2b;
+  --pelēks:#e9edf1;
+  --zils-akcents:#5BC5EC;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:'Candara','Aptos','Segoe UI',Corbel,sans-serif;
+  color:var(--tinte);
+  background:#dfe7ee;
+  background-image:
+    radial-gradient(circle at 8% 12%, #ffd9c9 0 42px, transparent 43px),
+    radial-gradient(circle at 3% 46%, #cfe8b8 0 52px, transparent 53px),
+    radial-gradient(circle at 10% 82%, #cfe2f7 0 46px, transparent 47px),
+    radial-gradient(circle at 93% 10%, #f7e3b0 0 50px, transparent 51px),
+    radial-gradient(circle at 98% 52%, #e3d0ef 0 44px, transparent 45px),
+    radial-gradient(circle at 90% 88%, #bfe6e2 0 48px, transparent 49px);
+  background-attachment:fixed;
+  padding:18px;
+  -webkit-text-size-adjust:100%;
+}
+.planshete{
+  max-width:1500px;margin:0 auto;background:var(--lapa);
+  border-radius:6px;box-shadow:0 14px 40px rgba(0,0,0,.22);
+  padding:26px 30px 34px;position:relative;overflow:hidden;
+}
+
+/* ---------- galvene ---------- */
+.galvene{position:relative;display:flex;align-items:flex-start;gap:20px;min-height:110px;}
+.apli{position:absolute;top:-18px;left:-8px;height:112px;pointer-events:none;}
+.virsraksts{position:relative;z-index:2;padding-top:14px;}
+h1{
+  font-size:clamp(28px,3.6vw,52px);font-weight:400;letter-spacing:.12em;
+  margin:0;line-height:1.05;
+}
+.apaksvirsraksts{
+  margin:8px 0 0;font-size:clamp(13px,1.25vw,18px);letter-spacing:.02em;color:#555;
+}
+.logo{margin-left:auto;width:clamp(96px,10vw,150px);height:auto;flex-shrink:0;position:relative;z-index:2;}
+
+/* ---------- klases slēdzis ---------- */
+.rezims{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  margin:14px 0 0;font-size:15px;
+}
+.rezims b{font-weight:700;letter-spacing:.02em;}
+.slēdzis{display:flex;border:2px solid var(--pelēks);border-radius:999px;overflow:hidden;}
+.slēdzis button{
+  border:0;background:#fff;font:inherit;font-size:15px;padding:8px 18px;cursor:pointer;
+  color:#666;min-height:44px;
+}
+.slēdzis button[aria-pressed="true"]{background:var(--macibas);color:#fff;font-weight:700;}
+
+/* ---------- cilnes ---------- */
+nav.cilnes{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0;border-bottom:3px solid var(--pelēks);padding-bottom:0;}
+nav.cilnes button{
+  font:inherit;font-size:clamp(13px,1.15vw,17px);border:0;background:#f3f6f9;color:#3a3a3a;
+  padding:14px 20px;border-radius:10px 10px 0 0;cursor:pointer;min-height:56px;
+  border-bottom:3px solid transparent;margin-bottom:-3px;letter-spacing:.01em;
+}
+nav.cilnes button .nr{font-weight:700;opacity:.5;margin-right:7px;}
+nav.cilnes button[aria-selected="true"]{background:#fff;border-bottom-color:var(--macibas);color:var(--macibas);font-weight:700;}
+nav.cilnes button[aria-selected="true"] .nr{opacity:1;}
+nav.cilnes button:focus-visible,.slēdzis button:focus-visible,button:focus-visible{outline:3px solid #111;outline-offset:2px;}
+
+section.panelis{display:none;padding-top:22px;}
+section.panelis.aktīvs{display:block;animation:parādīties .25s ease-out;}
+@keyframes parādīties{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+h2{font-size:clamp(20px,2.1vw,30px);font-weight:400;letter-spacing:.07em;margin:0 0 4px;}
+.pamācība{margin:0 0 18px;font-size:clamp(14px,1.2vw,18px);color:#555;}
+
+/* ---------- kopīgi ---------- */
+.poga{
+  font:inherit;font-size:16px;border:2px solid var(--macibas);background:#fff;color:var(--macibas);
+  border-radius:10px;padding:11px 20px;cursor:pointer;min-height:48px;font-weight:700;letter-spacing:.01em;
+}
+.poga:hover{background:var(--macibas);color:#fff;}
+.poga.klusa{border-color:#c6ced6;color:#5a5a5a;}
+.poga.klusa:hover{background:#eef2f6;color:#333;}
+.rīki{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;align-items:center;}
+
+.leģenda{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px;}
+.leģenda span{
+  display:inline-flex;align-items:center;gap:8px;font-size:15px;
+  background:#f5f8fa;border-radius:999px;padding:7px 15px 7px 9px;
+}
+.punkts{width:18px;height:18px;border-radius:50%;display:inline-block;}
+
+/* ---------- 1. diennakts aplis ---------- */
+.aplis-režģis{display:grid;grid-template-columns:minmax(320px,1fr) minmax(280px,420px);gap:30px;align-items:center;}
+@media (max-width:900px){.aplis-režģis{grid-template-columns:1fr;}}
+#pulkstenis{width:100%;max-width:560px;height:auto;max-height:62vh;justify-self:center;}
+#pulkstenis path{cursor:pointer;transition:opacity .15s;}
+#pulkstenis path:hover{opacity:.75;}
+#pulkstenis path.izvēlēts{stroke:#222;stroke-width:4;}
+#pulkstenis path:focus-visible{outline:none;stroke:#111;stroke-width:4;}
+.info-kartīte{border:3px solid var(--pelēks);border-radius:16px;padding:22px;min-height:250px;}
+.info-kartīte .laiks{font-size:34px;font-weight:700;letter-spacing:.03em;}
+.info-kartīte .nosaukums{font-size:26px;margin:6px 0 10px;}
+.info-kartīte .joma{display:inline-block;color:#fff;border-radius:999px;padding:5px 14px;font-size:15px;font-weight:700;}
+.info-kartīte p{font-size:17px;line-height:1.5;margin:14px 0 0;color:#444;}
+.info-kartīte .ikona{width:74px;height:74px;float:right;}
+.tukšs-teksts{color:#888;font-size:17px;}
+
+/* ---------- 2. secība ---------- */
+.paplāte{display:flex;flex-wrap:wrap;gap:10px;background:#f5f8fa;border-radius:14px;padding:14px;min-height:110px;}
+.kartīte{
+  border:3px solid #cfd8e0;background:#fff;border-radius:14px;padding:10px 14px;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:6px;width:132px;min-height:104px;justify-content:center;
+  font-size:14.5px;text-align:center;line-height:1.2;transition:transform .12s,border-color .12s;
+}
+.kartīte:hover{transform:translateY(-3px);}
+.kartīte.izvēlēta{border-color:#111;box-shadow:0 0 0 4px #ffe9a8;}
+.kartīte svg{width:42px;height:42px;}
+.josla{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;}
+.slots{
+  width:132px;min-height:132px;border:3px dashed #c3ccd5;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;position:relative;background:#fff;cursor:pointer;
+}
+.slots .kārta{position:absolute;top:4px;left:9px;font-size:15px;font-weight:700;color:#9aa6b1;}
+.slots.pareizi{border:3px solid var(--pienakumi);background:#f0faf2;}
+.slots.nepareizi{border:3px solid #d64545;background:#fdf1f1;}
+.slots .kartīte{border-color:transparent;}
+.rezultāts{margin-top:16px;font-size:20px;font-weight:700;min-height:30px;}
+
+/* ---------- 3. budžets ---------- */
+.budžets{display:block;}
+.stundu-režģis{display:grid;grid-template-columns:repeat(12,1fr);gap:6px;max-width:760px;}
+.stunda{aspect-ratio:1/1;border-radius:8px;background:#eef2f6;border:2px solid #dde4ea;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#9aa6b1;}
+.stunda.pilna{color:#fff;}
+.jomas-rinda{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.jomas-rinda .nos{width:190px;font-size:17px;flex-shrink:0;}
+@media (max-width:800px){.jomas-rinda{flex-wrap:wrap;} .jomas-rinda .nos{width:auto;flex:1;}}
+.raksta-lauks{flex:1;min-width:220px;position:relative;}
+.raksta-lauks canvas{
+  display:block;width:100%;height:58px;border:2px solid #cfd8e0;border-radius:10px;background:#fff;
+  touch-action:none;cursor:crosshair;
+}
+.raksta-lauks .mājiens{
+  position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#b3bdc6;font-size:14px;pointer-events:none;
+}
+.dzēst-svītra{
+  border:2px solid #cfd8e0;background:#fff;border-radius:10px;width:46px;height:46px;font:inherit;font-size:15px;
+  cursor:pointer;color:#5a5a5a;flex-shrink:0;
+}
+.dzēst-svītra:hover{background:#eef2f6;}
+#jomas3{margin-top:22px;}
+#jomas3 h3{font-size:19px;font-weight:400;letter-spacing:.05em;margin:0 0 12px;}
+.jomas-rinda .skaits{width:52px;text-align:center;font-size:22px;font-weight:700;}
+.jomas-rinda .skaits.slēpts{visibility:hidden;}
+.apaļa{
+  width:46px;height:46px;border-radius:50%;border:0;color:#fff;font:inherit;font-size:26px;line-height:1;
+  cursor:pointer;font-weight:700;
+}
+.apaļa:disabled{opacity:.3;cursor:default;}
+.kopā{margin-top:14px;font-size:20px;font-weight:700;}
+.kopā .atlikums{color:var(--macibas);}
+.kopā.pilns{color:var(--pienakumi);}
+.brīdinājums{margin-top:10px;font-size:16px;color:#b8480f;min-height:24px;}
+
+/* ---------- 4. plāns ---------- */
+.plāna-tabula{width:100%;border-collapse:collapse;}
+.plāna-tabula th{background:var(--macibas);color:#fff;font-weight:700;padding:10px;font-size:16px;letter-spacing:.02em;}
+.plāna-tabula td{border:2px solid #dde4ea;padding:8px;vertical-align:middle;}
+.plāna-tabula td.laiks{width:120px;text-align:center;font-size:19px;font-weight:700;background:#f5f8fa;}
+.plāna-slots{min-height:88px;display:flex;align-items:center;gap:10px;cursor:pointer;padding:4px;}
+.plāna-slots .tukšs{color:#a8b3bd;font-size:15px;}
+.plāna-slots .kartīte{flex-direction:row;width:auto;min-height:0;padding:8px 14px;}
+.plāna-slots .kartīte svg{width:34px;height:34px;}
+
+/* ---------- 4b. klases josla ---------- */
+.p4-režģis{display:grid;grid-template-columns:1fr 300px;gap:24px;align-items:start;}
+@media (max-width:1100px){.p4-režģis{grid-template-columns:1fr;}}
+.klases-josla{border:3px solid var(--pelēks);border-radius:16px;padding:16px;position:sticky;top:12px;}
+.klases-josla h3{margin:0 0 10px;font-size:19px;font-weight:400;letter-spacing:.05em;display:flex;justify-content:space-between;align-items:baseline;}
+.klases-josla h3 span{font-size:15px;color:#777;font-weight:700;}
+.vārda-lauks{display:block;font-size:14px;color:#555;margin-bottom:12px;}
+.vārda-lauks input{
+  display:block;width:100%;font:inherit;font-size:17px;margin-top:5px;padding:11px 12px;
+  border:2px solid #cfd8e0;border-radius:10px;min-height:48px;
+}
+.vārda-lauks input:focus{outline:3px solid var(--macibas);outline-offset:1px;}
+#saraksts4{max-height:420px;overflow-y:auto;margin-bottom:12px;}
+.skolēns{
+  display:flex;flex-direction:column;gap:6px;border:2px solid #dde4ea;border-radius:12px;
+  padding:9px 11px;margin-bottom:8px;cursor:pointer;background:#fff;min-height:56px;
+}
+.skolēns:hover{border-color:var(--macibas);}
+.skolēns.aktīvs{border-color:var(--macibas);background:#eef5fb;box-shadow:0 0 0 3px #cfe2f7;}
+.skolēns .v{font-size:15.5px;line-height:1.2;}
+.mini-josla{display:flex;gap:1px;height:9px;border-radius:5px;overflow:hidden;background:#eef2f6;}
+.mini-josla i{display:block;flex:1;}
+.klases-josla .poga{width:100%;margin-bottom:8px;font-size:15px;}
+.tukša-klase{color:#8d97a1;font-size:15px;padding:10px 2px 14px;}
+
+/* ---------- 4c. salīdzinājums ---------- */
+.salīdz{border:3px solid var(--macibas);border-radius:16px;padding:20px;margin-top:22px;}
+.salīdz-galva{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:16px;}
+.salīdz-galva h3{margin:0;font-size:22px;font-weight:400;letter-spacing:.05em;flex:1;}
+.laika-galva{display:flex;gap:2px;margin-left:190px;margin-bottom:6px;}
+.laika-galva span{flex:1;font-size:10.5px;color:#777;text-align:center;}
+.salīdz-rinda{display:flex;align-items:center;gap:10px;margin-bottom:7px;}
+.salīdz-rinda .v{width:180px;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.salīdz-rinda .josla-a{display:flex;gap:2px;flex:1;}
+.salīdz-rinda .josla-a i{flex:1;height:28px;border-radius:3px;background:#eef2f6;display:block;}
+.salīdz-rinda.etalons{margin-top:14px;padding-top:14px;border-top:2px dashed #c3ccd5;}
+.salīdz-rinda.etalons .v{font-weight:700;}
+.b-tabula{width:100%;border-collapse:collapse;font-size:16px;}
+.b-tabula th{background:var(--macibas);color:#fff;padding:9px 10px;text-align:center;}
+.b-tabula th:first-child{text-align:left;}
+.b-tabula td{border:1px solid #c8d2db;padding:8px 10px;text-align:center;}
+.b-tabula td:first-child{text-align:left;}
+.b-tabula tr.etalons td{background:#eef5fb;font-weight:700;}
+.b-tabula tr.videjais td{background:#f5f8fa;font-style:italic;}
+
+/* ---------- drukas lapa ---------- */
+#drukas-lapa{display:none;}
+#drukas-lapa .sk-lapa{page-break-after:always;padding:12px 0;}
+#drukas-lapa .dr-galva{display:flex;align-items:center;gap:14px;border-bottom:2px solid #2E74B5;padding-bottom:8px;margin-bottom:12px;}
+#drukas-lapa .dr-galva img{width:64px;height:auto;}
+#drukas-lapa h3{font-size:21px;margin:0;flex:1;}
+#drukas-lapa .datums{font-size:14px;color:#444;white-space:nowrap;}
+#drukas-lapa table{width:100%;border-collapse:collapse;font-size:15px;}
+#drukas-lapa td{border:1px solid #999;padding:4px 10px;}
+#drukas-lapa td.l{width:90px;font-weight:700;}
+
+/* ---------- 5. tabula ---------- */
+.norm-tabula{border-collapse:collapse;width:100%;max-width:960px;font-size:17px;}
+.norm-tabula th{background:var(--macibas);color:#fff;padding:11px 14px;text-align:left;letter-spacing:.02em;}
+.norm-tabula td{border:1px solid #c8d2db;padding:11px 14px;}
+.norm-tabula tr:nth-child(even) td{background:#f5f8fa;}
+.norm-tabula td.cik{font-weight:700;white-space:nowrap;}
+.piezīme{margin-top:12px;font-size:15px;color:#666;}
+
+/* ---------- 6. pašpārbaude ---------- */
+.jaut{border:3px solid var(--pelēks);border-radius:16px;padding:18px 20px;margin-bottom:14px;}
+.jaut .teksts{font-size:19px;margin-bottom:12px;}
+.jaut .teksts b{font-weight:700;}
+.atbildes{display:flex;gap:10px;flex-wrap:wrap;}
+.atbildes button{
+  font:inherit;font-size:16px;border:3px solid #cfd8e0;background:#fff;border-radius:12px;
+  padding:11px 20px;cursor:pointer;min-height:50px;
+}
+.atbildes button.pareizi{border-color:var(--pienakumi);background:#eefaf1;font-weight:700;}
+.atbildes button.nepareizi{border-color:#d64545;background:#fdf1f1;}
+.skaidrojums{margin-top:12px;font-size:16px;color:#3a3a3a;display:none;}
+.skaidrojums.redzams{display:block;}
+.punkti{font-size:22px;font-weight:700;margin-top:6px;}
+.avots6{font-size:15px;color:#2E74B5;background:#eef5fb;border-radius:10px;padding:9px 14px;margin:0 0 16px;display:none;}
+.avots6.redzams{display:block;}
+.jaut.personīgs{border-color:#bcd7ef;background:#f7fbff;}
+.jaut .birka{display:inline-block;font-size:13px;font-weight:700;color:#2E74B5;letter-spacing:.03em;margin-bottom:6px;}
+
+/* ---------- karjeras izglītības akcents ---------- */
+.karjera{
+  margin:26px 0 0;border-left:7px solid var(--valaspriekii);background:#FEF6EE;
+  border-radius:0 14px 14px 0;padding:14px 20px;display:flex;gap:16px;align-items:flex-start;
+}
+.karjera svg{width:38px;height:38px;flex-shrink:0;margin-top:2px;}
+.karjera .v{font-size:13px;font-weight:700;letter-spacing:.1em;color:#C75000;display:block;margin-bottom:4px;}
+.karjera .p{font-size:16.5px;line-height:1.5;color:#3a3a3a;}
+.karjera .p b{color:#1f1f1f;}
+@media print{.karjera{display:none !important;}}
+
+/* ---------- drukāšana ---------- */
+@media print{
+  body{background:#fff;padding:0;}
+  .planshete{box-shadow:none;padding:10px;}
+  nav.cilnes,.rezims,.rīki,.apli,.paplāte,.pamācība,.klases-josla,.salīdz{display:none !important;}
+  section.panelis{display:none !important;}
+  section.panelis.aktīvs{display:block !important;}
+  .p4-režģis{display:block !important;}
+  body.druka-visi .planshete{display:none !important;}
+  body.druka-visi #drukas-lapa{display:block !important;}
+  .plāna-tabula th{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important;}}
+</style>
+</head>
+<body>
+
+<!-- ikonu krātuve -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-celties" viewBox="0 0 64 64"><ellipse cx="19" cy="30" rx="14" ry="10" fill="#fff" stroke="#2b2b2b" stroke-width="3"/><circle cx="19" cy="30" r="6" fill="#2E74B5"/><circle cx="19" cy="30" r="2.4" fill="#111"/><path d="M33 28a12 9 0 0 0 24 0" fill="none" stroke="#2b2b2b" stroke-width="3" stroke-linecap="round"/><g stroke="#2b2b2b" stroke-width="3" stroke-linecap="round"><path d="M37 36l-3 6"/><path d="M45 38v6"/><path d="M53 36l3 6"/></g></symbol>
+    <symbol id="i-mazgaties" viewBox="0 0 64 64"><g transform="rotate(-38 32 32)"><rect x="30" y="29" width="30" height="6" rx="3" fill="#5BC5EC"/><path d="M56 29h4v6h-4z" fill="#2E74B5"/><rect x="24" y="27" width="8" height="10" rx="4" fill="#5BC5EC"/><rect x="9" y="25" width="18" height="12" rx="6" fill="#2E74B5"/><g fill="#fff" stroke="#aab6c0" stroke-width="1.4"><rect x="10.5" y="15" width="3.6" height="11" rx="1.8"/><rect x="15.3" y="15" width="3.6" height="11" rx="1.8"/><rect x="20.1" y="15" width="3.6" height="11" rx="1.8"/></g><path d="M11 14c4-4 9-4 13 0" stroke="#3E9C55" stroke-width="3.5" fill="none" stroke-linecap="round"/></g></symbol>
+    <symbol id="i-brokastis" viewBox="0 0 64 64"><path d="M14 44c-8-2-9-12-3-17-4-8 4-15 11-12 4-6 14-6 17 1 9-1 14 8 9 14 3 7-3 14-10 13-5 5-15 5-19-1z" fill="#fff" stroke="#d8dee3" stroke-width="2.5" stroke-linejoin="round"/><circle cx="31" cy="30" r="10" fill="#F2C900"/><circle cx="27.5" cy="26.5" r="3.2" fill="#fff" opacity=".55"/></symbol>
+    <symbol id="i-skola" viewBox="0 0 64 64"><path d="M22 20h20a14 14 0 0 1 14 14v18a4 4 0 0 1-4 4H12a4 4 0 0 1-4-4V34a14 14 0 0 1 14-14z" fill="#2E74B5"/><path d="M22 22v-4a10 10 0 0 1 20 0v4" stroke="#1a4f80" stroke-width="4" fill="none"/><rect x="18" y="36" width="28" height="20" rx="4" fill="#5BC5EC"/><rect x="27" y="42" width="10" height="6" rx="2" fill="#fff"/></symbol>
+    <symbol id="i-macities" viewBox="0 0 64 64"><path d="M10 16h18a6 6 0 0 1 6 6v28a6 6 0 0 0-6-6H10z" fill="#5BC5EC"/><path d="M54 16H36a6 6 0 0 0-6 6v28a6 6 0 0 1 6-6h18z" fill="#2E74B5"/></symbol>
+    <symbol id="i-majasdarbi" viewBox="0 0 64 64"><rect x="14" y="10" width="30" height="42" rx="4" fill="#fff" stroke="#2E74B5" stroke-width="4"/><path d="M21 22h16M21 30h16M21 38h10" stroke="#5BC5EC" stroke-width="4" stroke-linecap="round"/><path d="M44 40l10-10 6 6-10 10-8 2z" fill="#F08A24"/></symbol>
+    <symbol id="i-pusdienas" viewBox="0 0 64 64"><path d="M10 12v18a6 6 0 0 0 6 6v18M16 12v14" stroke="#3E9C55" stroke-width="4" stroke-linecap="round" fill="none"/><path d="M46 12c-6 0-8 8-8 16s3 8 3 8v18" stroke="#F08A24" stroke-width="4" stroke-linecap="round" fill="none"/></symbol>
+    <symbol id="i-sports" viewBox="0 0 64 64"><circle cx="32" cy="32" r="20" fill="#F08A24"/><path d="M32 12v40M12 32h40" stroke="#fff" stroke-width="4"/></symbol>
+    <symbol id="i-ara" viewBox="0 0 64 64"><path d="M32 12l14 24H18z" fill="#3E9C55"/><path d="M32 24l16 24H16z" fill="#57b96c"/><rect x="28" y="46" width="8" height="10" rx="2" fill="#8a5a2b"/><circle cx="52" cy="14" r="6" fill="#F2C900"/></symbol>
+    <symbol id="i-hobijs" viewBox="0 0 64 64"><path d="M32 32L32.0 8.0A24 24 0 0 1 49.0 15.0Z" fill="#E4572E"/><path d="M32 32L49.0 15.0A24 24 0 0 1 56.0 32.0Z" fill="#F2C900"/><path d="M32 32L56.0 32.0A24 24 0 0 1 49.0 49.0Z" fill="#3E9C55"/><path d="M32 32L49.0 49.0A24 24 0 0 1 32.0 56.0Z" fill="#5BC5EC"/><path d="M32 32L32.0 56.0A24 24 0 0 1 15.0 49.0Z" fill="#7A5AC8"/><path d="M32 32L15.0 49.0A24 24 0 0 1 8.0 32.0Z" fill="#F08A24"/><path d="M32 32L8.0 32.0A24 24 0 0 1 15.0 15.0Z" fill="#2E74B5"/><path d="M32 32L15.0 15.0A24 24 0 0 1 32.0 8.0Z" fill="#E45C9A"/><circle cx="32" cy="32" r="24" fill="none" stroke="#2b2b2b" stroke-width="2.5"/><circle cx="32" cy="32" r="5" fill="#fff" stroke="#2b2b2b" stroke-width="2.5"/><path d="M32 2l5 9H27z" fill="#2b2b2b"/></symbol>
+    <symbol id="i-pienakumi" viewBox="0 0 64 64"><path d="M6 32h24l-3 24H9z" fill="#5BC5EC" stroke="#2E74B5" stroke-width="2.5" stroke-linejoin="round"/><path d="M7 32a11 8 0 0 1 22 0" fill="none" stroke="#2E74B5" stroke-width="3"/><path d="M52 6L40 34" stroke="#8a5a2b" stroke-width="5" stroke-linecap="round"/><path d="M34 34h16l6 20H30z" fill="#F0A93B" stroke="#C97B1E" stroke-width="2.5" stroke-linejoin="round"/><path d="M32 44h22" stroke="#C97B1E" stroke-width="2.5"/></symbol>
+    <symbol id="i-vakarinas" viewBox="0 0 64 64"><path d="M8 36h48a24 18 0 0 1-48 0z" fill="#5BC5EC" stroke="#2E74B5" stroke-width="2.5" stroke-linejoin="round"/><ellipse cx="32" cy="36" rx="24" ry="5" fill="#F0A93B" stroke="#C97B1E" stroke-width="2"/><g stroke="#9fb3c2" stroke-width="3.5" fill="none" stroke-linecap="round"><path d="M22 24c-4-4 4-6 0-11"/><path d="M32 22c-4-4 4-7 0-12"/><path d="M42 24c-4-4 4-6 0-11"/></g></symbol>
+    <symbol id="i-lasit" viewBox="0 0 64 64"><path d="M6 16h22c2 0 4 2 4 4v30c0-3-2-4-4-4H6z" fill="#7A5AC8"/><path d="M58 16H36c-2 0-4 2-4 4v30c0-3 2-4 4-4h22z" fill="#9d84dd"/><path d="M11 24h14M11 31h14M39 24h14M39 31h14" stroke="#fff" stroke-width="3" stroke-linecap="round"/></symbol>
+    <symbol id="i-ekrans" viewBox="0 0 64 64"><rect x="8" y="14" width="48" height="30" rx="4" fill="#5a6b7a"/><rect x="13" y="19" width="38" height="20" rx="2" fill="#cfe2f7"/><path d="M22 52h20" stroke="#5a6b7a" stroke-width="5" stroke-linecap="round"/></symbol>
+    <symbol id="i-gulet" viewBox="0 0 64 64"><path d="M42 12a18 18 0 1 0 12 30A20 20 0 0 1 42 12z" fill="#7A5AC8"/><path d="M14 16h10l-10 10h10" stroke="#F2C900" stroke-width="3" fill="none" stroke-linecap="round"/></symbol>
+    <symbol id="i-atputa" viewBox="0 0 64 64"><circle cx="32" cy="32" r="18" fill="#F2C900"/><circle cx="25" cy="28" r="3" fill="#5a4a00"/><circle cx="39" cy="28" r="3" fill="#5a4a00"/><path d="M22 38a12 8 0 0 0 20 0" stroke="#5a4a00" stroke-width="4" fill="none" stroke-linecap="round"/></symbol>
+    <symbol id="i-muzika" viewBox="0 0 64 64"><path d="M28 46V12l22-6v10L28 22" fill="none" stroke="#7A5AC8" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/><ellipse cx="20" cy="47" rx="10" ry="8" transform="rotate(-18 20 47)" fill="#7A5AC8"/><ellipse cx="42" cy="41" rx="9" ry="7" transform="rotate(-18 42 41)" fill="#9d84dd"/></symbol>
+    <symbol id="i-maksla" viewBox="0 0 64 64"><path d="M50 6l8 8-24 24-8-8z" fill="#8a5a2b"/><path d="M26 30l8 8-5 5-8-8z" fill="#c0c8ce"/><path d="M21 35l8 8-9 12-11-11z" fill="#E4572E"/></symbol>
+    <symbol id="i-saule" viewBox="0 0 64 64"><circle cx="32" cy="32" r="13" fill="#F2C900"/><g stroke="#F08A24" stroke-width="4" stroke-linecap="round"><path d="M32 6v8M32 50v8M6 32h8M50 32h8M13 13l6 6M45 45l6 6M51 13l-6 6M19 45l-6 6"/></g></symbol><symbol id="i-gula" viewBox="0 0 64 64"><path d="M6 44V22" stroke="#8a5a2b" stroke-width="5" stroke-linecap="round"/><path d="M58 44V32" stroke="#8a5a2b" stroke-width="5" stroke-linecap="round"/><rect x="6" y="32" width="52" height="9" rx="4" fill="#7A5AC8"/><rect x="10" y="24" width="16" height="9" rx="4" fill="#fff" stroke="#c8cfd6" stroke-width="2"/><path d="M26 32c4-6 22-6 26 0z" fill="#9d84dd"/></symbol>
+    <symbol id="i-karjera" viewBox="0 0 64 64"><circle cx="32" cy="32" r="25" fill="#FDE7D2" stroke="#C75000" stroke-width="3"/><path d="M43 21L27 27l-6 16 16-6z" fill="#F08A24" stroke="#C75000" stroke-width="2" stroke-linejoin="round"/><circle cx="32" cy="32" r="3.5" fill="#C75000"/></symbol>
+  </defs>
+</svg>
+
+<div class="planshete">
+
+  <header class="galvene">
+    <svg class="apli" viewBox="0 0 420 150" aria-hidden="true">
+      <circle cx="60" cy="72" r="56" fill="#5BC5EC" opacity=".85"/>
+      <circle cx="132" cy="72" r="52" fill="#c9ccce" opacity=".45"/>
+      <circle cx="204" cy="72" r="52" fill="#c9ccce" opacity=".38"/>
+      <circle cx="276" cy="72" r="52" fill="#c9ccce" opacity=".3"/>
+      <circle cx="348" cy="72" r="52" fill="#c9ccce" opacity=".22"/>
+    </svg>
+    <div class="virsraksts">
+      <h1>Dienas&nbsp; režīms</h1>
+      <p class="apakšvirsraksts">Prot plānot laiku mācībām, pienākumiem, vaļaspriekiem un atpūtai · 1.–3. klase</p>
+    </div>
+    <img class="logo" id="logo" alt="Jaunmārupes pamatskolas logo">
+  </header>
+
+  <div class="rezims">
+    <b>Klase:</b>
+    <div class="slēdzis" role="group" aria-label="Klases līmenis">
+      <button id="r1" aria-pressed="false">1. klase (bez skaitļiem)</button>
+      <button id="r23" aria-pressed="true">2.–3. klase (ar stundām)</button>
+    </div>
+    <span style="color:#777;font-size:14px">Pieskaries kartītei un tad vietai, kur to novietot.</span>
+  </div>
+
+  <nav class="cilnes" role="tablist">
+    <button role="tab" aria-selected="true" data-p="p1"><span class="nr">1</span>Diennakts aplis</button>
+    <button role="tab" aria-selected="false" data-p="p2"><span class="nr">2</span>Dienas secība</button>
+    <button role="tab" aria-selected="false" data-p="p3"><span class="nr">3</span>24 stundu laiks</button>
+    <button role="tab" aria-selected="false" data-p="p4"><span class="nr">4</span>Mans dienas plāns</button>
+    <button role="tab" aria-selected="false" data-p="p5"><span class="nr">5</span>Cik daudz vajag?</button>
+    <button role="tab" aria-selected="false" data-p="p6"><span class="nr">6</span>Pašpārbaude</button>
+  </nav>
+
+  <!-- ============ 1 ============ -->
+  <section class="panelis aktīvs" id="p1">
+    <h2>Diennakts aplis</h2>
+    <p class="pamācība">Diennaktī ir 24 stundas. Pieskaries jebkurai stundai aplī un uzzini, kas tajā laikā notiek skolēna dienā.</p>
+    <div class="leģenda" id="leģenda1"></div>
+    <div class="aplis-režģis">
+      <svg id="pulkstenis" viewBox="0 0 520 520" role="img" aria-label="Diennakts aplis ar 24 stundām"></svg>
+      <div class="info-kartīte" id="info1">
+        <p class="tukšs-teksts">Pieskaries kādai stundai aplī →<br>šeit parādīsies, ko dara tajā laikā.</p>
+      </div>
+    </div>
+    <div class="karjera">
+      <svg aria-hidden="true"><use href="#i-karjera"/></svg>
+      <div>
+        <span class="v">KARJERAS IZGLĪTĪBA</span>
+        <span class="p"><b>Prasme: pamanīt, kur paiet mana diena.</b> Katrai profesijai ir sava diennakts kārtība: maiznieks sāk darbu naktī, skolotājs sāk no rīta, frizieris strādā darba dienā, ārsts strādā maiņās, bet digitālā satura autors jeb influenceris visu laiku ir darbā. Kad proti izlasīt savu dienu pa stundām, vari saprast arī to, <b>kāda darba diena tev pašam būtu piemērota</b>.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 2 ============ -->
+  <section class="panelis" id="p2">
+    <h2>Dienas secība</h2>
+    <p class="pamācība">Saliec darbus tādā secībā, kā tie notiek dienā. Vienu un to pašu kartīti drīkst likt vairākas reizes — piemēram, skola pirms un pēc pusdienām. Kopā var ielikt līdz 12 kartītēm. Kartīti noņem, pieskaroties tai vēlreiz.</p>
+    <div class="paplāte" id="paplāte2" aria-label="Kartītes"></div>
+    <div class="josla" id="josla2"></div>
+    <div class="rīki">
+      <button class="poga" id="pārbaudīt2">Pārbaudīt</button>
+      <button class="poga klusa" id="jaukt2">Sajaukt no jauna</button>
+    </div>
+    <p class="rezultāts" id="rezultāts2" role="status"></p>
+    <div class="karjera">
+      <svg aria-hidden="true"><use href="#i-karjera"/></svg>
+      <div>
+        <span class="v">KARJERAS IZGLĪTĪBA</span>
+        <span class="p"><b>Prasme: darīt darbus pareizā secībā.</b> Pavārs vispirms sagriež, tad cep. Celtnieks vispirms liek pamatus, tad sienas. Ja secība sajaukta, darbs jāpārtaisa no jauna. <b>Prasme darīt secīgi no „pareizā sākuma”</b> noder katrā profesijā.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3 ============ -->
+  <section class="panelis" id="p3">
+    <h2>24 stundu laiks</h2>
+    <p class="pamācība">Dienā ir tikai 24 stundas. Sadali tās starp visām jomām tā, lai pietiek laika arī miegam! Blakus katrai jomai vari uzrakstīt vai uzzīmēt, ko tieši tur dari.</p>
+    <div class="budžets">
+      <div class="stundu-režģis" id="režģis3" aria-hidden="true"></div>
+      <p class="kopā" id="kopā3"></p>
+      <p class="brīdinājums" id="brīdinājums3" role="status"></p>
+      <div id="jomas3"></div>
+    </div>
+    <div class="rīki">
+      <button class="poga" id="paraugs3">Parādīt ieteicamo dienu</button>
+      <button class="poga klusa" id="notīrīt3">Sākt no jauna</button>
+      <button class="poga klusa" id="dzēstRakstus3">Notīrīt visus ierakstus</button>
+    </div>
+    <div class="karjera">
+      <svg aria-hidden="true"><use href="#i-karjera"/></svg>
+      <div>
+        <span class="v">KARJERAS IZGLĪTĪBA</span>
+        <span class="p"><b>Prasme: sadalīt laiku starp darbiem.</b> Ikvienā darbā laika ir tikai tik, cik ir, un tas jāsadala starp uzdevumiem. Frizieris zina, cik ilgi prasa katrs klients, būvnieks — cik dienas prasa katrs posms. <b>Kas prot plānot laiku, paspēj vairāk un mazāk steidzas.</b></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 4 ============ -->
+  <section class="panelis" id="p4">
+    <h2>Mans dienas plāns</h2>
+    <p class="pamācība">Izvēlies kartīti un ieliec to sev piemērotā laikā. Ja kartīte jānoņem — pieskaries tai vēlreiz. Ieraksti savu vārdu un uzvārdu un saglabā plānu, lai tas paliek klases sarakstā.</p>
+    <div class="p4-režģis">
+      <div class="p4-galvenais">
+        <div class="paplāte" id="paplāte4"></div>
+        <table class="plāna-tabula" style="margin-top:18px">
+          <thead><tr><th style="width:120px">LAIKS</th><th id="galva4">KO ES DARU</th></tr></thead>
+          <tbody id="tabula4"></tbody>
+        </table>
+        <div class="rīki">
+          <button class="poga" id="saglabāt4">Saglabāt plānu</button>
+          <button class="poga klusa" id="jauns4">Jauns plāns</button>
+          <button class="poga klusa" id="drukāt4">Izdrukāt šo plānu</button>
+          <button class="poga klusa" id="notīrīt4">Notīrīt tabulu</button>
+        </div>
+        <p class="brīdinājums" id="ziņa4" role="status"></p>
+      </div>
+
+      <aside class="klases-josla">
+        <h3>Klases plāni <span id="skaits4">0 / 30</span></h3>
+        <label class="vārda-lauks">Vārds un uzvārds
+          <input id="vārds4" type="text" maxlength="40" autocomplete="off" placeholder="piem., Anna Bērziņa">
+        </label>
+        <div id="saraksts4"><p class="tukša-klase">Vēl neviens plāns nav saglabāts.</p></div>
+        <button class="poga" id="salīdzināt4">Salīdzināt klasi</button>
+        <button class="poga klusa" id="pdf4">Saglabāt visas klases plānus PDF</button>
+        <button class="poga klusa" id="dzēst4">Notīrīt klases sarakstu</button>
+      </aside>
+    </div>
+
+    <div class="salīdz" id="salīdz4" hidden>
+      <div class="salīdz-galva">
+        <h3>Klases salīdzinājums</h3>
+        <div class="slēdzis" role="group" aria-label="Salīdzinājuma veids">
+          <button id="sA" aria-pressed="true">Krāsu joslas</button>
+          <button id="sB" aria-pressed="false">Skaitļi</button>
+        </div>
+        <button class="poga klusa" id="aizvērt4" style="width:auto">Aizvērt</button>
+      </div>
+      <div class="leģenda" id="leģenda4"></div>
+      <div id="salīdz-saturs"></div>
+    </div>
+    <div class="karjera">
+      <svg aria-hidden="true"><use href="#i-karjera"/></svg>
+      <div>
+        <span class="v">KARJERAS IZGLĪTĪBA</span>
+        <span class="p"><b>Prasme: izveidot savu plānu un tam sekot.</b> Šo sauc par pašvadību — kad cilvēks pats zina, kas viņam šodien jāizdara, un nevienam tas nav jāatgādina. <b>Darba devēji to novērtē visaugstāk</b>, jo tavas patstāvīgā darba iemaņas sākās ar paša izveidotu dienas plānu.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 5 ============ -->
+  <section class="panelis" id="p5">
+    <h2>Cik daudz vajag?</h2>
+    <p class="pamācība">Ieteicamais laiks 7–9 gadus vecam skolēnam vienā dienā.</p>
+    <table class="norm-tabula">
+      <thead><tr><th>DARBĪBA</th><th>CIK ILGI DIENĀ</th><th>KĀPĒC</th></tr></thead>
+      <tbody>
+        <tr><td>Miegs naktī</td><td class="cik">10–11 stundas</td><td>Miegā aug ķermenis un atpūšas smadzenes.</td></tr>
+        <tr><td>Mācības skolā</td><td class="cik">4–6 stundas</td><td>Galvenais dienas darbs.</td></tr>
+        <tr><td>Mājas darbi</td><td class="cik">30–60 minūtes</td><td>Nostiprina to, ko iemācījies stundā.</td></tr>
+        <tr><td>Kustības un rotaļas ārā</td><td class="cik">vismaz 1 stunda</td><td>Stiprina sirdi, kaulus un noskaņojumu.</td></tr>
+        <tr><td>Pulciņš vai vaļasprieks</td><td class="cik">1–2 stundas</td><td>Ļauj darīt to, kas pašam patīk.</td></tr>
+        <tr><td>Mājas pienākumi</td><td class="cik">15–30 minūtes</td><td>Ģimenē katram ir savs darbs.</td></tr>
+        <tr><td>Ekrāns brīvajā laikā</td><td class="cik">līdz 1 stundai</td><td>Ilgs ekrāna laiks nogurdina acis un traucē iemigt.</td></tr>
+        <tr><td>Ēdienreizes</td><td class="cik">4–5 reizes</td><td>Regulāras maltītes dod spēku visai dienai.</td></tr>
+      </tbody>
+    </table>
+    <p class="piezīme">Miegs + mācības + pienākumi + vaļasprieki + atpūta = 24 stundas.</p>
+    <div class="karjera">
+      <svg aria-hidden="true"><use href="#i-karjera"/></svg>
+      <div>
+        <span class="v">KARJERAS IZGLĪTĪBA</span>
+        <span class="p"><b>Prasme: rūpēties par savu spēku.</b> Neviens darbs nav labi padarīts, ja cilvēks nav izgulējies un paēdis. Sportists, ugunsdzēsējs, ārsts — viņi visi zina savu darba spēka un atpūtas līdzsvaru. <b>Rūpes par sevi ir daļa no profesionalitātes.</b></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 6 ============ -->
+  <section class="panelis" id="p6">
+    <h2>Pašpārbaude</h2>
+    <p class="pamācība">Izlasi un izvēlies atbildi. Pēc katras atbildes uzzināsi, kāpēc tā ir vai nav laba izvēle. Katru reizi jautājumi ir citi.</p>
+    <p class="avots6" id="avots6"></p>
+    <div id="jautājumi6"></div>
+    <p class="punkti" id="punkti6" role="status"></p>
+    <div class="rīki"><button class="poga" id="atsākt6">Jauni jautājumi</button></div>
+    <div class="karjera">
+      <svg aria-hidden="true"><use href="#i-karjera"/></svg>
+      <div>
+        <span class="v">KARJERAS IZGLĪTĪBA</span>
+        <span class="p"><b>Prasme: novērtēt sevi un kaut ko mainīt.</b> Pieaugušie darbā to sauc par pašnovērtējumu: paskaties, kas izdevās, kas ne, un izlabo. <b>Slikta atzīme nav kļūda — tā ir norāde, ko darīt citādi.</b> Šī prasme noder visu mūžu.</span>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* ---------- logo ---------- */
+document.getElementById('logo').src = "data:image/png;base64,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";
+
+/* ---------- dati ---------- */
+const JOMAS = {
+  macibas:   {n:'Mācības',            k:'var(--macibas)',    h:'#2E74B5'},
+  pienakumi: {n:'Pienākumi',          k:'var(--pienakumi)',  h:'#3E9C55'},
+  hobiji:    {n:'Vaļasprieki',        k:'var(--valaspriekii)',h:'#F08A24'},
+  atputa:    {n:'Atpūta',             k:'var(--atputa)',     h:'#F2C900'},
+  miegs:     {n:'Miegs',              k:'var(--miegs)',      h:'#7A5AC8'}
+};
+
+/* 24 stundas: sākuma stunda -> apraksts */
+const DIENNAKTS = [
+  {no:0,  lidz:7,  joma:'miegs',    nos:'Miegs',                 ik:'i-gulet',     t:'Naktī ķermenis atpūšas un aug. 1.–3. klases skolēnam vajag 10–11 stundas miega.'},
+  {no:7,  lidz:8,  joma:'pienakumi',nos:'Celšanās un rīta darbi',ik:'i-celties',   t:'Piecelties, saklāt gultu, nomazgāties, saģērbties un paēst brokastis.'},
+  {no:8,  lidz:14, joma:'macibas',  nos:'Skola',                 ik:'i-skola',     t:'Mācību stundas skolā. Šis ir dienas galvenais darbs.'},
+  {no:14, lidz:15, joma:'atputa',   nos:'Pusdienas un atelpa',   ik:'i-pusdienas', t:'Pēc skolas vajag paēst un mazliet atpūsties, pirms sāc mājas darbus.'},
+  {no:15, lidz:16, joma:'macibas',  nos:'Mājas darbi',           ik:'i-majasdarbi',t:'Mājas darbiem pietiek ar 30–60 minūtēm, ja strādā, netraucēts.'},
+  {no:16, lidz:17, joma:'hobiji',   nos:'Pulciņš vai sports',    ik:'i-sports',    t:'Laiks tam, kas patīk: sports, mūzika, māksla, deja.'},
+  {no:17, lidz:18, joma:'hobiji',   nos:'Rotaļas ārā',           ik:'i-ara',       t:'Katru dienu vismaz stundu jāizkustas svaigā gaisā.'},
+  {no:18, lidz:19, joma:'pienakumi',nos:'Vakariņas un palīdzība',ik:'i-vakarinas', t:'Kopīgas vakariņas un mājas pienākumi: novākt galdu, sakārtot istabu.'},
+  {no:19, lidz:20, joma:'hobiji',   nos:'Brīvais laiks',         ik:'i-hobijs',    t:'Vari zīmēt, spēlēties, būt kopā ar ģimeni. Ekrānam — ne vairāk par stundu.'},
+  {no:20, lidz:21, joma:'atputa',   nos:'Gatavošanās miegam',    ik:'i-lasit',     t:'Sakārto somu, nomazgājies, palasi grāmatu. Miers palīdz ātrāk iemigt.'},
+  {no:21, lidz:24, joma:'miegs',    nos:'Miegs',                 ik:'i-gulet',     t:'Gulētiešana ap plkst. 21.00 — tad no rīta būsi možs.'}
+];
+
+/* ---------- klases režīms ---------- */
+let radaSkaitlus = true;
+function iestatitRezimu(ar){
+  radaSkaitlus = ar;
+  document.getElementById('r1').setAttribute('aria-pressed', String(!ar));
+  document.getElementById('r23').setAttribute('aria-pressed', String(ar));
+  document.querySelectorAll('.skaits').forEach(e=>e.classList.toggle('slēpts', !ar));
+  zimetKopa();
+  zimetPulksteni();
+}
+document.getElementById('r1').onclick = ()=>iestatitRezimu(false);
+document.getElementById('r23').onclick = ()=>iestatitRezimu(true);
+
+/* ---------- cilnes ---------- */
+document.querySelectorAll('nav.cilnes button').forEach(b=>{
+  b.onclick = ()=>{
+    document.querySelectorAll('nav.cilnes button').forEach(x=>x.setAttribute('aria-selected','false'));
+    b.setAttribute('aria-selected','true');
+    document.querySelectorAll('section.panelis').forEach(s=>s.classList.remove('aktīvs'));
+    document.getElementById(b.dataset.p).classList.add('aktīvs');
+    /* rakstāmlauki jāpārmēra brīdī, kad cilne kļūst redzama */
+    if(b.dataset.p==='p3') Object.keys(JOMAS).forEach(sagatavotZimeti);
+    if(b.dataset.p==='p6') zimetJautajumus();
+  };
+});
+
+/* ---------- leģenda ---------- */
+function zimetLegendu(el){
+  el.innerHTML = Object.values(JOMAS).map(j=>
+    `<span><i class="punkts" style="background:${j.h}"></i>${j.n}</span>`).join('');
+}
+zimetLegendu(document.getElementById('leģenda1'));
+
+/* ============ 1. DIENNAKTS APLIS ============ */
+function sektors(cx,cy,r1,r2,a1,a2){
+  const p=(a,r)=>[cx+r*Math.cos((a-90)*Math.PI/180), cy+r*Math.sin((a-90)*Math.PI/180)];
+  const [x1,y1]=p(a1,r2),[x2,y2]=p(a2,r2),[x3,y3]=p(a2,r1),[x4,y4]=p(a1,r1);
+  const liels = (a2-a1)>180?1:0;
+  return `M${x1} ${y1}A${r2} ${r2} 0 ${liels} 1 ${x2} ${y2}L${x3} ${y3}A${r1} ${r1} 0 ${liels} 0 ${x4} ${y4}Z`;
+}
+function stundasJoma(h){ return DIENNAKTS.find(d=>h>=d.no && h<d.lidz); }
+
+function zimetPulksteni(){
+  const s = document.getElementById('pulkstenis');
+  const cx=260, cy=260, r2=225, r1=132;
+  let g = '';
+  for(let h=0; h<24; h++){
+    const d = stundasJoma(h);
+    const a1 = h*15, a2 = (h+1)*15;
+    g += `<path d="${sektors(cx,cy,r1,r2,a1,a2)}" fill="${JOMAS[d.joma].h}" stroke="#fff" stroke-width="2" data-h="${h}" tabindex="0" role="button" aria-label="Plkst. ${h}: ${d.nos}"/>`;
+    if(radaSkaitlus){
+      const am=(a1+a2)/2, rr=(r1+r2)/2;
+      const x=cx+rr*Math.cos((am-90)*Math.PI/180), y=cy+rr*Math.sin((am-90)*Math.PI/180);
+      g += `<text x="${x}" y="${y+6}" text-anchor="middle" font-size="19" font-weight="700" fill="${d.joma==='atputa'?'#5a4a00':'#fff'}" pointer-events="none">${h}</text>`;
+    }
+  }
+  g += `<circle cx="${cx}" cy="${cy}" r="${r1-6}" fill="#f5f8fa"/>`;
+  g += `<text x="${cx}" y="${cy-8}" text-anchor="middle" font-size="54" font-weight="700" fill="#2b2b2b">24</text>`;
+  g += `<text x="${cx}" y="${cy+30}" text-anchor="middle" font-size="22" fill="#666">stundas</text>`;
+  s.innerHTML = g;
+  s.querySelectorAll('path').forEach(p=>{
+    const rad = ()=>raditStundu(+p.dataset.h, p);
+    p.addEventListener('click', rad);
+    p.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();rad();} });
+  });
+}
+function raditStundu(h, el){
+  document.querySelectorAll('#pulkstenis path').forEach(p=>p.classList.remove('izvēlēts'));
+  if(el) el.classList.add('izvēlēts');
+  const d = stundasJoma(h);
+  const laiks = radaSkaitlus ? `${String(h).padStart(2,'0')}.00–${String((h+1)%24).padStart(2,'0')}.00` : '';
+  document.getElementById('info1').innerHTML =
+    `<svg class="ikona"><use href="#${d.ik}"/></svg>
+     ${laiks?`<div class="laiks">${laiks}</div>`:''}
+     <div class="nosaukums">${d.nos}</div>
+     <span class="joma" style="background:${JOMAS[d.joma].h};${d.joma==='atputa'?'color:#5a4a00':''}">${JOMAS[d.joma].n}</span>
+     <p>${d.t}</p>`;
+}
+zimetPulksteni();
+
+/* ============ 2. DIENAS SECĪBA ============ */
+/* no/lidz = agrākais un vēlākais dienas posms, kurā darbība ir loģiska */
+const SEC_KARTITES = [
+  {ik:'i-celties',   n:'Pamostos',      no:1,  lidz:1},
+  {ik:'i-brokastis', n:'Brokastis',     no:2,  lidz:2},
+  {ik:'i-skola',     n:'Skola',         no:3,  lidz:5},
+  {ik:'i-pusdienas', n:'Pusdienas',     no:4,  lidz:4},
+  {ik:'i-majasdarbi',n:'Mājas darbi',   no:6,  lidz:7},
+  {ik:'i-sports',    n:'Pulciņš',       no:6,  lidz:8},
+  {ik:'i-saule',     n:'Brīvais laiks', no:6,  lidz:10},
+  {ik:'i-vakarinas', n:'Vakariņas',     no:9,  lidz:9},
+  {ik:'i-gulet',     n:'Eju gulēt',     no:11, lidz:11}
+];
+const SEC_SLOTI = 12;
+let izvēlēta2 = null;
+function kartīte2(i){
+  const d = SEC_KARTITES[i];
+  return `<div class="kartīte" data-i="${i}"><svg><use href="#${d.ik}"/></svg><span>${d.n}</span></div>`;
+}
+function saliktSecibu(){
+  const secība = SEC_KARTITES.map((_,i)=>i).sort(()=>Math.random()-.5);
+  document.getElementById('paplāte2').innerHTML = secība.map(kartīte2).join('');
+  let sl=''; for(let i=0;i<SEC_SLOTI;i++) sl += `<div class="slots" data-s="${i}"><span class="kārta">${i+1}.</span></div>`;
+  document.getElementById('josla2').innerHTML = sl;
+  document.getElementById('rezultāts2').textContent='';
+  izvēlēta2 = null;
+  piesaistit2();
+}
+function piesaistit2(){
+  document.querySelectorAll('#paplāte2 .kartīte').forEach(k=>{
+    k.onclick = ()=>{
+      document.querySelectorAll('#paplāte2 .kartīte').forEach(x=>x.classList.remove('izvēlēta'));
+      if(izvēlēta2 === k){ izvēlēta2 = null; return; }
+      k.classList.add('izvēlēta'); izvēlēta2 = k;
+    };
+  });
+  document.querySelectorAll('#josla2 .slots').forEach(s=>{
+    s.onclick = ()=>{
+      if(!izvēlēta2) return;
+      const esošā = s.querySelector('.kartīte'); if(esošā) esošā.remove();
+      const kop = izvēlēta2.cloneNode(true);
+      kop.classList.remove('izvēlēta');
+      kop.onclick = e=>{ e.stopPropagation(); kop.remove(); notīrītAtzīmes2(); };
+      s.appendChild(kop);
+      izvēlēta2.classList.remove('izvēlēta'); izvēlēta2 = null;
+      notīrītAtzīmes2();
+    };
+  });
+}
+function notīrītAtzīmes2(){
+  document.querySelectorAll('#josla2 .slots').forEach(s=>s.classList.remove('pareizi','nepareizi'));
+  document.getElementById('rezultāts2').textContent='';
+}
+document.getElementById('jaukt2').onclick = saliktSecibu;
+document.getElementById('pārbaudīt2').onclick = ()=>{
+  const sloti = [...document.querySelectorAll('#josla2 .slots')];
+  sloti.forEach(s=>s.classList.remove('pareizi','nepareizi'));
+  const liktie = sloti.filter(s=>s.querySelector('.kartīte'));
+  const r = document.getElementById('rezultāts2');
+  if(!liktie.length){ r.textContent = 'Vispirms ieliec kartītes joslā.'; return; }
+  /* secība ir pareiza, ja katras kartītes dienas posms nav agrāks par iepriekšējo */
+  let posms = 0, kļūda = null;
+  for(const s of liktie){
+    const d = SEC_KARTITES[+s.querySelector('.kartīte').dataset.i];
+    if(d.lidz < posms){ kļūda = s; break; }
+    posms = Math.max(posms, d.no);
+    s.classList.add('pareizi');
+  }
+  if(kļūda){
+    kļūda.classList.add('nepareizi');
+    r.textContent = 'Sarkanā kartīte dienā notiek agrāk nekā tās priekšā liktās — pārliec to tuvāk dienas sākumam.';
+    return;
+  }
+  r.textContent = liktie.length < 6
+    ? `Pagaidām viss pareizi (${liktie.length} kartītes). Ieliec vēl, lai diena būtu pilnīga.`
+    : `✓ Lieliski! Visas ${liktie.length} kartītes ir pareizā secībā.`;
+};
+saliktSecibu();
+
+/* ============ 3. 24 STUNDU LAIKS ============ */
+const stundas3 = {macibas:0, pienakumi:0, hobiji:0, atputa:0, miegs:0};
+const IETEIKUMS = {miegs:10, macibas:7, pienakumi:2, hobiji:3, atputa:2};
+function zimetJomas(){
+  document.getElementById('jomas3').innerHTML =
+    '<h3>Ko tieši es daru?</h3>' +
+    Object.entries(JOMAS).map(([k,j])=>
+    `<div class="jomas-rinda">
+       <button class="apaļa" style="background:${j.h};${k==='atputa'?'color:#5a4a00':''}" data-j="${k}" data-d="-1" aria-label="Mazāk: ${j.n}">–</button>
+       <span class="skaits ${radaSkaitlus?'':'slēpts'}" id="sk-${k}">0</span>
+       <button class="apaļa" style="background:${j.h};${k==='atputa'?'color:#5a4a00':''}" data-j="${k}" data-d="1" aria-label="Vairāk: ${j.n}">+</button>
+       <span class="nos"><i class="punkts" style="background:${j.h}"></i> ${j.n}</span>
+       <span class="raksta-lauks">
+         <canvas id="zim-${k}" aria-label="Rakstāmlauks: ${j.n}"></canvas>
+         <span class="mājiens" id="māj-${k}">Uzraksti vai uzzīmē, ko tieši dari…</span>
+       </span>
+       <button class="dzēst-svītra" data-dz="${k}" title="Notīrīt šo lauku" aria-label="Notīrīt lauku: ${j.n}">✕</button>
+     </div>`).join('');
+  document.querySelectorAll('#jomas3 .apaļa').forEach(b=>{
+    b.onclick = ()=>{
+      const k=b.dataset.j, d=+b.dataset.d;
+      const kopā = Object.values(stundas3).reduce((a,b)=>a+b,0);
+      if(d>0 && kopā>=24){ paziņot('Diennaktī vairāk par 24 stundām nav! Kaut kur jāatņem.'); return; }
+      stundas3[k] = Math.max(0, stundas3[k]+d);
+      paziņot('');
+      zimetKopa();
+    };
+  });
+  Object.keys(JOMAS).forEach(sagatavotZimeti);
+  document.querySelectorAll('#jomas3 .dzēst-svītra').forEach(b=>{
+    b.onclick = ()=>notīrītZīmējumu(b.dataset.dz);
+  });
+}
+
+/* --- rakstāmlauki (melna līnija, pirksts / marķieris / pele) --- */
+function sagatavotZimeti(k){
+  const c = document.getElementById('zim-'+k);
+  if(!c) return;
+  const mērogs = window.devicePixelRatio || 1;
+  const uzstādīt = ()=>{
+    const dati = c.width ? c.toDataURL() : null;
+    c.width = Math.max(1, Math.round(c.clientWidth * mērogs));
+    c.height = Math.max(1, Math.round(c.clientHeight * mērogs));
+    const t = c.getContext('2d');
+    t.scale(mērogs, mērogs);
+    t.lineWidth = 3; t.lineCap = 'round'; t.lineJoin = 'round'; t.strokeStyle = '#111';
+    if(dati){ const a = new Image(); a.onload = ()=>t.drawImage(a, 0, 0, c.clientWidth, c.clientHeight); a.src = dati; }
+  };
+  uzstādīt();
+  if(!c.dataset.gatavs){
+    c.dataset.gatavs = '1';
+    let zīmē = false;
+    const t = ()=>c.getContext('2d');
+    const punkts = e=>{ const r = c.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+    c.addEventListener('pointerdown', e=>{
+      zīmē = true; c.setPointerCapture(e.pointerId);
+      const m = document.getElementById('māj-'+k); if(m) m.style.display = 'none';
+      const [x,y] = punkts(e); const ct = t(); ct.beginPath(); ct.moveTo(x,y); ct.lineTo(x+0.1,y);
+      ct.stroke();
+    });
+    c.addEventListener('pointermove', e=>{
+      if(!zīmē) return; e.preventDefault();
+      const [x,y] = punkts(e); const ct = t(); ct.lineTo(x,y); ct.stroke();
+    });
+    ['pointerup','pointercancel','pointerleave'].forEach(n=>c.addEventListener(n, ()=>{ zīmē = false; }));
+    window.addEventListener('resize', uzstādīt);
+  }
+}
+function notīrītZīmējumu(k){
+  const c = document.getElementById('zim-'+k); if(!c) return;
+  c.getContext('2d').clearRect(0,0,c.width,c.height);
+  const m = document.getElementById('māj-'+k); if(m) m.style.display = '';
+}
+function paziņot(t){ document.getElementById('brīdinājums3').textContent = t; }
+function zimetKopa(){
+  const r = document.getElementById('režģis3');
+  if(!r) return;
+  let kv = [];
+  Object.entries(stundas3).forEach(([k,n])=>{ for(let i=0;i<n;i++) kv.push(JOMAS[k].h); });
+  let html='';
+  for(let i=0;i<24;i++){
+    const gaisa = kv[i]==='#F2C900';
+    html += `<div class="stunda ${kv[i]?'pilna':''}" style="${kv[i]?`background:${kv[i]};border-color:${kv[i]};${gaisa?'color:#5a4a00':''}`:''}">${radaSkaitlus?(i+1):''}</div>`;
+  }
+  r.innerHTML = html;
+  Object.keys(stundas3).forEach(k=>{
+    const e = document.getElementById('sk-'+k);
+    if(e){ e.textContent = stundas3[k]; e.classList.toggle('slēpts', !radaSkaitlus); }
+  });
+  const kopā = Object.values(stundas3).reduce((a,b)=>a+b,0);
+  const e = document.getElementById('kopā3');
+  if(radaSkaitlus)
+    e.innerHTML = kopā===24 ? 'Visas 24 stundas sadalītas!' : `Sadalīts: ${kopā} h · <span class="atlikums">atlicis ${24-kopā} h</span>`;
+  else
+    e.innerHTML = kopā===24 ? 'Diena ir pilna!' : 'Aplī vēl ir tukšas vietas.';
+  e.classList.toggle('pilns', kopā===24);
+  if(kopā===24 && stundas3.miegs < 9) paziņot('Diena ir pilna, bet miegam atlikts par maz — vajag 10–11 stundas.');
+}
+document.getElementById('paraugs3').onclick = ()=>{
+  Object.keys(stundas3).forEach(k=>stundas3[k]=IETEIKUMS[k]);
+  paziņot('Šāda diena ir ieteicama 1.–3. klases skolēnam.');
+  zimetKopa();
+};
+document.getElementById('notīrīt3').onclick = ()=>{
+  Object.keys(stundas3).forEach(k=>stundas3[k]=0); paziņot(''); zimetKopa();
+};
+document.getElementById('dzēstRakstus3').onclick = ()=>{ Object.keys(JOMAS).forEach(notīrītZīmējumu); };
+zimetJomas(); zimetKopa();
+
+/* ============ 4. MANS PLĀNS ============ */
+const PLANS_KARTITES = [
+  {ik:'i-celties',   n:'Pamostos',         j:'pienakumi'},
+  {ik:'i-mazgaties', n:'Mazgājos',         j:'pienakumi'},
+  {ik:'i-brokastis', n:'Brokastis',        j:'pienakumi'},
+  {ik:'i-skola',     n:'Skola',            j:'macibas'},
+  {ik:'i-pusdienas', n:'Pusdienas',        j:'atputa'},
+  {ik:'i-majasdarbi',n:'Mājas darbi',      j:'macibas'},
+  {ik:'i-sports',    n:'Sports',           j:'hobiji'},
+  {ik:'i-muzika',    n:'Mūzika',           j:'hobiji'},
+  {ik:'i-maksla',    n:'Māksla',           j:'hobiji'},
+  {ik:'i-ara',       n:'Ārā',              j:'hobiji'},
+  {ik:'i-hobijs',    n:'Citi vaļasprieki', j:'hobiji'},
+  {ik:'i-pienakumi', n:'Mājas darbiņi',    j:'pienakumi'},
+  {ik:'i-vakarinas', n:'Vakariņas',        j:'pienakumi'},
+  {ik:'i-lasit',     n:'Lasu grāmatu',     j:'atputa'},
+  {ik:'i-ekrans',    n:'Ekrāna laiks',     j:'atputa'},
+  {ik:'i-atputa',    n:'Atpūšos',          j:'atputa'},
+  {ik:'i-gulet',     n:'Eju gulēt',        j:'miegs'},
+  {ik:'i-gula',      n:'Guļu',             j:'miegs'}
+];
+const LAIKI = ['6.00','7.00','8.00','9.00','10.00','11.00','12.00','13.00','14.00',
+               '15.00','16.00','17.00','18.00','19.00','20.00','21.00','22.00','23.00'];
+/*            6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 */
+const ETALONS = [17,0,3,3,3,3,3,3,4,5,6,9,12,10,13,16,17,17];
+const MAKS_SKOLENI = 30;
+let izvēlēta4 = null;
+let klase = [];          // {v:'Vārds Uzvārds', p:[idx|null,...]}
+let aktīvais = -1;       // indekss klasē, kuru šobrīd labo
+let bVeids = false;      // false = A (krāsu joslas), true = B (skaitļi)
+
+function zimetPlanu(){
+  document.getElementById('paplāte4').innerHTML =
+    PLANS_KARTITES.map((d,i)=>`<div class="kartīte" data-i="${i}"><svg><use href="#${d.ik}"/></svg><span>${d.n}</span></div>`).join('');
+  document.getElementById('tabula4').innerHTML = LAIKI.map((l,i)=>
+    `<tr><td class="laiks">${l}</td><td><div class="plāna-slots" data-s="${i}"><span class="tukšs">— pieskaries un ieliec kartīti —</span></div></td></tr>`).join('');
+  piesaistit4();
+}
+function piesaistit4(){
+  document.querySelectorAll('#paplāte4 .kartīte').forEach(k=>{
+    k.onclick = ()=>{
+      document.querySelectorAll('#paplāte4 .kartīte').forEach(x=>x.classList.remove('izvēlēta'));
+      if(izvēlēta4===k){ izvēlēta4=null; return; }
+      k.classList.add('izvēlēta'); izvēlēta4=k;
+    };
+  });
+  document.querySelectorAll('.plāna-slots').forEach(s=>{
+    s.onclick = ()=>{
+      if(!izvēlēta4) return;
+      const esošā = s.querySelector('.kartīte'); if(esošā) esošā.remove();
+      const kop = izvēlēta4.cloneNode(true);
+      kop.classList.remove('izvēlēta');
+      kop.onclick = e=>{ e.stopPropagation(); kop.remove(); parbauditTukso(s); };
+      const t = s.querySelector('.tukšs'); if(t) t.remove();
+      s.appendChild(kop);
+      izvēlēta4.classList.remove('izvēlēta'); izvēlēta4 = null;
+    };
+  });
+}
+function parbauditTukso(s){
+  if(!s.querySelector('.kartīte')) s.innerHTML = '<span class="tukšs">— pieskaries un ieliec kartīti —</span>';
+}
+function savaktPlanu(){
+  return [...document.querySelectorAll('#tabula4 .plāna-slots')].map(s=>{
+    const k = s.querySelector('.kartīte');
+    return k ? +k.dataset.i : null;
+  });
+}
+function ieliktPlanu(arr){
+  document.querySelectorAll('#tabula4 .plāna-slots').forEach((s,i)=>{
+    s.innerHTML = '';
+    const idx = arr[i];
+    if(idx===null || idx===undefined){ parbauditTukso(s); return; }
+    const d = PLANS_KARTITES[idx];
+    const kop = document.createElement('div');
+    kop.className = 'kartīte'; kop.dataset.i = idx;
+    kop.innerHTML = `<svg><use href="#${d.ik}"/></svg><span>${d.n}</span>`;
+    kop.onclick = e=>{ e.stopPropagation(); kop.remove(); parbauditTukso(s); };
+    s.appendChild(kop);
+  });
+}
+function ziņot4(t){ document.getElementById('ziņa4').textContent = t; }
+function krāsaSlota(idx){ return idx===null||idx===undefined ? null : JOMAS[PLANS_KARTITES[idx].j].h; }
+
+function zimetKlasi(){
+  document.getElementById('skaits4').textContent = `${klase.length} / ${MAKS_SKOLENI}`;
+  const s = document.getElementById('saraksts4');
+  if(!klase.length){ s.innerHTML = '<p class="tukša-klase">Vēl neviens plāns nav saglabāts.</p>'; return; }
+  s.innerHTML = klase.map((sk,i)=>
+    `<div class="skolēns ${i===aktīvais?'aktīvs':''}" data-i="${i}" tabindex="0" role="button">
+       <span class="v">${sk.v}</span>
+       <span class="mini-josla">${sk.p.map(x=>`<i style="background:${krāsaSlota(x)||'#eef2f6'}"></i>`).join('')}</span>
+     </div>`).join('');
+  s.querySelectorAll('.skolēns').forEach(e=>{
+    const atv = ()=>atvertSkolenu(+e.dataset.i);
+    e.onclick = atv;
+    e.onkeydown = ev=>{ if(ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); atv(); } };
+  });
+}
+function atvertSkolenu(i){
+  aktīvais = i;
+  document.getElementById('vārds4').value = klase[i].v;
+  ieliktPlanu(klase[i].p);
+  document.getElementById('galva4').textContent = `KO DARA — ${klase[i].v}`;
+  ziņot4(`Atvērts: ${klase[i].v}. Pārlabo un spied «Saglabāt plānu».`);
+  zimetKlasi();
+  document.getElementById('vārds4').scrollIntoView({block:'nearest'});
+}
+document.getElementById('saglabāt4').onclick = ()=>{
+  const v = document.getElementById('vārds4').value.trim().replace(/\s+/g,' ');
+  if(!v){ ziņot4('Vispirms ieraksti vārdu un uzvārdu.'); document.getElementById('vārds4').focus(); return; }
+  const p = savaktPlanu();
+  if(p.every(x=>x===null)){ ziņot4('Plāns ir tukšs — vispirms ieliec vismaz vienu kartīti.'); return; }
+  const jau = klase.findIndex(sk=>sk.v.toLowerCase()===v.toLowerCase());
+  if(jau>=0){ klase[jau] = {v, p}; aktīvais = jau; ziņot4(`${v} plāns atjaunots.`); }
+  else{
+    if(klase.length>=MAKS_SKOLENI){ ziņot4(`Saraksts pilns — vairāk par ${MAKS_SKOLENI} plāniem neietilpst.`); return; }
+    klase.push({v,p}); aktīvais = klase.length-1; ziņot4(`${v} plāns saglabāts.`);
+  }
+  document.getElementById('galva4').textContent = `KO DARA — ${v}`;
+  zimetKlasi();
+  if(!document.getElementById('salīdz4').hidden) zimetSalidz();
+};
+document.getElementById('jauns4').onclick = ()=>{
+  aktīvais = -1;
+  document.getElementById('vārds4').value = '';
+  document.getElementById('galva4').textContent = 'KO ES DARU';
+  zimetPlanu(); zimetKlasi(); ziņot4('Tabula gatava nākamajam skolēnam.');
+  document.getElementById('vārds4').focus();
+};
+document.getElementById('notīrīt4').onclick = ()=>{ zimetPlanu(); ziņot4('Tabula notīrīta. Saglabātie klases plāni ir saglabāti.'); };
+document.getElementById('dzēst4').onclick = ()=>{
+  if(!klase.length) return;
+  if(!confirm('Vai tiešām dzēst visus saglabātos klases plānus? Šo darbību nevar atsaukt.')) return;
+  klase = []; aktīvais = -1; zimetKlasi(); zimetSalidz(); ziņot4('Klases saraksts notīrīts.');
+};
+document.getElementById('drukāt4').onclick = ()=>{ document.body.classList.remove('druka-visi'); window.print(); };
+
+/* --- salīdzinājums --- */
+zimetLegendu(document.getElementById('leģenda4'));
+document.getElementById('salīdzināt4').onclick = ()=>{
+  const b = document.getElementById('salīdz4');
+  b.hidden = false; zimetSalidz(); b.scrollIntoView({behavior:'smooth', block:'start'});
+};
+document.getElementById('aizvērt4').onclick = ()=>{ document.getElementById('salīdz4').hidden = true; };
+document.getElementById('sA').onclick = ()=>{ bVeids=false; slēdzisAB(); };
+document.getElementById('sB').onclick = ()=>{ bVeids=true; slēdzisAB(); };
+function slēdzisAB(){
+  document.getElementById('sA').setAttribute('aria-pressed', String(!bVeids));
+  document.getElementById('sB').setAttribute('aria-pressed', String(bVeids));
+  document.getElementById('leģenda4').style.display = bVeids ? 'none' : 'flex';
+  zimetSalidz();
+}
+function rindaA(v, p, klases){
+  return `<div class="salīdz-rinda ${klases||''}">
+    <span class="v">${v}</span>
+    <span class="josla-a">${p.map(x=>{const k=krāsaSlota(x);return `<i style="${k?`background:${k}`:''}" title="${x!=null?PLANS_KARTITES[x].n:'tukšs'}"></i>`;}).join('')}</span>
+  </div>`;
+}
+function skaitiJomas(p){
+  const s={macibas:0,pienakumi:0,hobiji:0,atputa:0,miegs:0};
+  p.forEach(x=>{ if(x!=null) s[PLANS_KARTITES[x].j]++; });
+  return s;
+}
+function zimetSalidz(){
+  const c = document.getElementById('salīdz-saturs');
+  if(!c) return;
+  if(!klase.length){ c.innerHTML = '<p class="tukša-klase">Vēl nav neviena saglabāta plāna, ko salīdzināt.</p>'; return; }
+  if(!bVeids){
+    c.innerHTML =
+      `<div class="laika-galva">${LAIKI.map(l=>`<span>${l}</span>`).join('')}</div>` +
+      klase.map(sk=>rindaA(sk.v, sk.p)).join('') +
+      rindaA('Ieteicamā diena', ETALONS, 'etalons');
+  } else {
+    const j = Object.entries(JOMAS);
+    const vid = {macibas:0,pienakumi:0,hobiji:0,atputa:0,miegs:0};
+    klase.forEach(sk=>{ const s=skaitiJomas(sk.p); Object.keys(vid).forEach(k=>vid[k]+=s[k]); });
+    c.innerHTML =
+      `<table class="b-tabula">
+        <thead><tr><th>SKOLĒNS</th>${j.map(([k,o])=>`<th>${o.n}</th>`).join('')}<th>AIZPILDĪTS</th></tr></thead>
+        <tbody>
+          ${klase.map(sk=>{const s=skaitiJomas(sk.p);
+            return `<tr><td>${sk.v}</td>${j.map(([k])=>`<td>${s[k]||'–'}</td>`).join('')}<td>${sk.p.filter(x=>x!=null).length} / ${LAIKI.length}</td></tr>`;}).join('')}
+          <tr class="videjais"><td>Klases vidēji</td>${j.map(([k])=>`<td>${(vid[k]/klase.length).toFixed(1)}</td>`).join('')}<td>—</td></tr>
+          ${(()=>{const s=skaitiJomas(ETALONS);
+            return `<tr class="etalons"><td>Ieteicamā diena</td>${j.map(([k])=>`<td>${s[k]||'–'}</td>`).join('')}<td>${LAIKI.length} / ${LAIKI.length}</td></tr>`;})()}
+        </tbody>
+      </table>
+      <p class="piezīme">Skaitlis rāda, cik reižu dienas plānā ierakstīta attiecīgās jomas darbība.</p>`;
+  }
+}
+
+/* --- visas klases PDF --- */
+document.getElementById('pdf4').onclick = ()=>{
+  if(!klase.length){ ziņot4('Nav neviena saglabāta plāna, ko saglabāt PDF failā.'); return; }
+  const logoSrc = document.getElementById('logo').src;
+  document.getElementById('drukas-lapa').innerHTML = klase.map(sk=>
+    `<div class="sk-lapa">
+       <div class="dr-galva">
+         <img src="${logoSrc}" alt="">
+         <h3>Dienas režīms — ${sk.v}</h3>
+         <span class="datums">Datums: ____________</span>
+       </div>
+       <table>${LAIKI.map((l,i)=>
+         `<tr><td class="l">${l}</td><td>${sk.p[i]!=null?PLANS_KARTITES[sk.p[i]].n:''}</td></tr>`).join('')}</table>
+     </div>`).join('');
+  document.body.classList.add('druka-visi');
+  ziņot4('Drukas logā izvēlies galamērķi «Saglabāt kā PDF».');
+  window.print();
+};
+window.addEventListener('afterprint', ()=>document.body.classList.remove('druka-visi'));
+/* drošības tīkls, ja pārlūks nenosūta afterprint notikumu */
+setInterval(()=>{ if(document.body.classList.contains('druka-visi') && !window.matchMedia('print').matches) document.body.classList.remove('druka-visi'); }, 4000);
+
+zimetPlanu(); zimetKlasi();
+
+/* ============ 6. PAŠPĀRBAUDE ============ */
+/* vispārīgo jautājumu krājums — katru reizi izlozē citus */
+const JAUT_KRAJUMS = [
+  {t:'Mārtiņš iet gulēt plkst. 23.00 un ceļas plkst. 7.00. Vai viņš izguļas?',
+   a:['Jā, pietiek','Nē, par maz'], p:1,
+   s:'Tās ir tikai 8 stundas. 1.–3. klases skolēnam vajag 10–11 stundas miega.', tema:'miegs'},
+  {t:'Kad vislabāk pildīt mājas darbus?',
+   a:['Tūlīt pēc pusdienām un atelpas','Vēlu vakarā pirms gulētiešanas'], p:0,
+   s:'Vakarā smadzenes jau ir nogurušas. Pēcpusdienā darbs padodas ātrāk.', tema:'majasdarbi'},
+  {t:'Cik ilgi katru dienu vajadzētu izkustēties svaigā gaisā?',
+   a:['Pietiek ar 10 minūtēm','Vismaz 1 stundu'], p:1,
+   s:'Vismaz stunda kustību dienā dod spēku un labu garastāvokli.', tema:'kustibas'},
+  {t:'Anna pēc skolas 3 stundas skatās video un tad sāk mājas darbus plkst. 21.00. Ko mainīt?',
+   a:['Vispirms mājas darbi, tad ekrāns','Viss ir kārtībā'], p:0,
+   s:'Vispirms padara darbus, tad atpūšas. Ekrānam brīvajā laikā pietiek ar vienu stundu.', tema:'ekrans'},
+  {t:'Kas ir dienas režīms?',
+   a:['Kārtība, kādā dienā notiek darbi','Saraksts ar aizliegumiem'], p:0,
+   s:'Dienas režīms palīdz paspēt visu: mācīties, palīdzēt mājās, darīt to, kas patīk, un atpūsties.', tema:'plans'},
+  {t:'Somu skolai vislabāk sakārtot…',
+   a:['No rīta, steidzoties','Iepriekšējā vakarā'], p:1,
+   s:'Vakarā sakārtota soma ietaupa rīta laiku un nervus.', tema:'rits'},
+  {t:'Kāpēc no rīta jāēd brokastis?',
+   a:['Lai būtu spēks mācīties','Lai ātrāk augtu mati'], p:0,
+   s:'Brokastis dod enerģiju pirmajām stundām. Bez tām ātrāk zūd uzmanība.', tema:'brokastis'},
+  {t:'Cik ēdienreižu dienā ieteicams 1.–3. klases skolēnam?',
+   a:['1–2 reizes','4–5 reizes'], p:1,
+   s:'Regulāras maltītes uztur spēku visu dienu.', tema:'edienreizes'},
+  {t:'Jēkabs katru vakaru guļ dažādā laikā — reizēm 20.00, reizēm 23.00. Kas notiek?',
+   a:['Nekas, galvenais izgulēties nedēļas nogalē','Ķermenim grūti iemigt un no rīta ir grūti celties'], p:1,
+   s:'Ķermenis pierod pie viena laika. Vienāds gulētiešanas laiks palīdz ātrāk iemigt.', tema:'miegs'},
+  {t:'Kas palīdz vieglāk iemigt?',
+   a:['Mierīga nodarbe un grāmata pirms miega','Spraiga spēle telefonā gultā'], p:0,
+   s:'Ekrāna gaisma un aizraujoša spēle uzbudina — iemigt kļūst grūtāk.', tema:'miegs'},
+  {t:'Lauras dienā nav ierakstīts neviens mājas pienākums. Vai tā ir laba diena?',
+   a:['Jā, bērnam nekas nav jādara','Nē, arī bērnam ģimenē ir savi darbiņi'], p:1,
+   s:'15–30 minūtes palīdzības mājās ir dienas normāla daļa.', tema:'pienakumi'},
+  {t:'Cik ilgi mājas darbiem parasti vajadzētu 1.–3. klasē?',
+   a:['30–60 minūtes','3 stundas'], p:0,
+   s:'Ja darbi velkas ilgāk, parasti ir traucēkļi vai vajadzīga palīdzība.', tema:'majasdarbi'},
+  {t:'Kas ir vaļasprieks?',
+   a:['Nodarbe, ko dari, jo tā patīk','Uzdevums, ko uzdod skolotājs'], p:0,
+   s:'Sports, mūzika, māksla, konstruēšana — katram savs.', tema:'valasprieki'},
+  {t:'Roberts pēc skolas uzreiz sēžas pie datora līdz vakariņām. Ko ieteiktu?',
+   a:['Vispirms izkustēties ārā, tad citas lietas','Turpināt, tā ir laba atpūta'], p:0,
+   s:'Pēc sēdēšanas skolā ķermenim vajag kustību, ne vēl vairāk sēdēšanas.', tema:'ekrans'},
+  {t:'Kāpēc dienā vajag arī atpūtu, ne tikai darbus?',
+   a:['Lai smadzenes atgūst spēku','Lai diena paietu ātrāk'], p:0,
+   s:'Bez atelpas uzmanība krīt un darbs padodas lēnāk.', tema:'plans'},
+  {t:'Elīza plāno dienā trīs pulciņus pēc kārtas līdz 20.00. Kas var notikt?',
+   a:['Nepaliek laika mājas darbiem un atpūtai','Nekas, jo vairāk, jo labāk'], p:0,
+   s:'Arī labām lietām dienā ir robeža — 24 stundas nav vairāk.', tema:'plans'},
+  {t:'Kurš rīts sākas mierīgāk?',
+   a:['Celties 10 minūtes pirms iziešanas','Celties tā, lai pietiek laika brokastīm un saģērbties'], p:1,
+   s:'Steiga no rīta rada nervozitāti visai dienai.', tema:'rits'},
+  {t:'Ko nozīmē „ekrāna laiks”?',
+   a:['Laiks, ko pavadi pie telefona, datora vai TV','Laiks, kad skolā ir projektors'], p:0,
+   s:'Brīvajā laikā tam ieteicams atvēlēt līdz vienai stundai dienā.', tema:'ekrans'}
+];
+
+/* --- personīgie jautājumi no paša saliktā plāna --- */
+function plānaAvots(){
+  const tabulā = (typeof savaktPlanu === 'function') ? savaktPlanu() : [];
+  if(tabulā.some(x=>x!==null)){
+    const v = (aktīvais>=0 && klase[aktīvais]) ? klase[aktīvais].v : null;
+    return {p:tabulā, v};
+  }
+  if(klase.length){ const sk = klase[klase.length-1]; return {p:sk.p, v:sk.v}; }
+  return null;
+}
+function stundaSlotam(i){ return 6 + i; }
+function personīgieJaut(plāns){
+  const idx = n => PLANS_KARTITES.findIndex(k=>k.n===n);
+  const KUR = n => plāns.map((x,i)=>x===idx(n)?i:-1).filter(i=>i>=0);
+  const j = [];
+
+  const gulēt = KUR('Eju gulēt');
+  if(gulēt.length && stundaSlotam(gulēt[0]) >= 22){
+    j.push({t:`Tavā plānā gulētiešana ir plkst. ${stundaSlotam(gulēt[0])}.00. Ja no rīta jāceļas 7.00 — cik stundu miega sanāk?`,
+      a:['Apmēram 9 vai mazāk — par maz','Vairāk nekā 10 — tieši pietiek'], p:0,
+      s:'1.–3. klases skolēnam vajag 10–11 stundas. Pamēģini gulētiešanu pārcelt uz 21.00.', tema:'miegs'});
+  } else if(!gulēt.length && !KUR('Guļu').length){
+    j.push({t:'Tavā plānā nav ierakstīts miegs. Kas dienā nedrīkst iztrūkt?',
+      a:['Miegs — bez tā ķermenis neatpūšas','Miegu var izlaist, ja diena bijusi interesanta'], p:0,
+      s:'Miegs ir dienas garākā un svarīgākā daļa — 10–11 stundas.', tema:'miegs'});
+  }
+  if(!KUR('Ārā').length && !KUR('Sports').length){
+    j.push({t:'Tavā plānā nav ne sporta, ne laika ārā. Cik daudz kustību vajag katru dienu?',
+      a:['Vismaz 1 stundu','Nemaz nevajag, ja diena bijusi gara'], p:0,
+      s:'Ieliec plānā vismaz vienu stundu kustību — vislabāk pēc mājas darbiem.', tema:'kustibas'});
+  }
+  const ekrāns = KUR('Ekrāna laiks');
+  if(ekrāns.length >= 2){
+    j.push({t:`Tavā plānā ekrāna laiks ierakstīts ${ekrāns.length} reizes. Cik daudz tā ieteicams brīvajā laikā?`,
+      a:['Līdz 1 stundai dienā','Cik vien gribas'], p:0,
+      s:'Ilgs ekrāna laiks nogurdina acis un traucē iemigt. Vienu no tiem vari nomainīt pret ko citu.', tema:'ekrans'});
+  }
+  if(!KUR('Brokastis').length){
+    j.push({t:'Tavā plānā nav brokastu. Kāpēc tās ir svarīgas?',
+      a:['Dod spēku pirmajām stundām','Nav svarīgas, ja pusdienas ir skolā'], p:0,
+      s:'Bez brokastīm ātrāk zūd uzmanība jau otrajā stundā.', tema:'brokastis'});
+  }
+  const md = KUR('Mājas darbi');
+  if(md.length && stundaSlotam(md[0]) >= 20){
+    j.push({t:`Mājas darbus tu esi ielicis plkst. ${stundaSlotam(md[0])}.00. Kad tos izdarīt vieglāk?`,
+      a:['Pēcpusdienā, kad galva vēl svaiga','Jo vēlāk, jo labāk'], p:0,
+      s:'Vakarā smadzenes ir nogurušas, un tas pats darbs prasa vairāk laika.', tema:'majasdarbi'});
+  }
+  if(!KUR('Mājas darbiņi').length){
+    j.push({t:'Tavā plānā nav neviena mājas pienākuma. Cik daudz laika tiem parasti pietiek?',
+      a:['15–30 minūtes','Vesela diena'], p:0,
+      s:'Arī neliela palīdzība mājās — galda noklāšana, istabas sakārtošana — ir dienas daļa.', tema:'pienakumi'});
+  }
+  return j.slice(0,2);
+}
+
+function jaukt(masīvs){ return masīvs.map(x=>x).sort(()=>Math.random()-.5); }
+let jautājumi6 = [], atbildēts = 0, pareizi6 = 0;
+
+function zimetJautajumus(){
+  atbildēts = 0; pareizi6 = 0;
+  document.getElementById('punkti6').textContent='';
+  const avots = plānaAvots();
+  const pers = avots ? personīgieJaut(avots.p) : [];
+  const av = document.getElementById('avots6');
+  if(pers.length){
+    av.textContent = avots.v
+      ? `Divi pirmie jautājumi veidoti no plāna, ko salika ${avots.v}.`
+      : 'Divi pirmie jautājumi veidoti no plāna, kas šobrīd salikts 4. cilnē.';
+    av.classList.add('redzams');
+  } else {
+    av.classList.remove('redzams'); av.textContent = '';
+  }
+  const aizņemtās = pers.map(j=>j.tema);
+  const brīvie = JAUT_KRAJUMS.filter(j=>!aizņemtās.includes(j.tema));
+  const vispārīgie = jaukt(brīvie.length >= 6-pers.length ? brīvie : JAUT_KRAJUMS).slice(0, 6 - pers.length);
+  /* katram jautājumam sajaucam arī atbilžu secību */
+  jautājumi6 = pers.concat(vispārīgie).map(j=>{
+    const kārta = jaukt(j.a.map((_,i)=>i));
+    return {t:j.t, s:j.s, tema:j.tema, pers:pers.includes(j),
+            a:kārta.map(i=>j.a[i]), p:kārta.indexOf(j.p)};
+  });
+
+  document.getElementById('jautājumi6').innerHTML = jautājumi6.map((j,i)=>
+    `<div class="jaut ${j.pers?'personīgs':''}">
+       ${j.pers?'<span class="birka">PAR TAVU PLĀNU</span><br>':''}
+       <div class="teksts"><b>${i+1}.</b> ${j.t}</div>
+       <div class="atbildes">${j.a.map((a,n)=>`<button data-j="${i}" data-n="${n}">${a}</button>`).join('')}</div>
+       <div class="skaidrojums" id="sk6-${i}">${j.s}</div>
+     </div>`).join('');
+
+  document.querySelectorAll('#jautājumi6 .atbildes button').forEach(b=>{
+    b.onclick = ()=>{
+      const i=+b.dataset.j, n=+b.dataset.n, j=jautājumi6[i];
+      const grupa = b.parentElement;
+      if(grupa.dataset.gatavs) return;
+      grupa.dataset.gatavs = '1';
+      grupa.querySelectorAll('button').forEach((x,xi)=>{
+        if(xi===j.p) x.classList.add('pareizi');
+        else if(xi===n) x.classList.add('nepareizi');
+      });
+      document.getElementById('sk6-'+i).classList.add('redzams');
+      atbildēts++; if(n===j.p) pareizi6++;
+      document.getElementById('punkti6').textContent =
+        atbildēts===jautājumi6.length
+          ? `Pareizi: ${pareizi6} no ${jautājumi6.length}. ${pareizi6===jautājumi6.length?'Teicami!':'Spied «Jauni jautājumi» un mēģini vēlreiz.'}`
+          : `Atbildēts: ${atbildēts} no ${jautājumi6.length}`;
+    };
+  });
+}
+document.getElementById('atsākt6').onclick = zimetJautajumus;
+zimetJautajumus();
+</script>
+<div id="drukas-lapa"></div>
+</body>
+</html>
