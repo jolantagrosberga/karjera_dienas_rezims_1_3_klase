@@ -246,11 +246,22 @@ h2{font-size:clamp(19px,1.8vw,26px);font-weight:400;letter-spacing:.07em;margin:
 
 /* ---------- drukas lapa ---------- */
 #drukas-lapa{display:none;}
-#drukas-lapa .sk-lapa{page-break-after:always;padding:12px 0;}
+#drukas-lapa,#drukas-lapa *{box-sizing:border-box;}
+#drukas-lapa .sk-lapa{page-break-after:always;padding:12px 0;width:100%;overflow:hidden;}
 #drukas-lapa .dr-galva{display:flex;align-items:center;gap:14px;border-bottom:2px solid #2E74B5;padding-bottom:8px;margin-bottom:12px;}
 #drukas-lapa .dr-galva img{width:64px;height:auto;}
 #drukas-lapa h3{font-size:21px;margin:0;flex:1;}
 #drukas-lapa .datums{font-size:14px;color:#444;white-space:nowrap;}
+#drukas-lapa .dr-saturs{display:flex;gap:18px;align-items:flex-start;width:100%;}
+#drukas-lapa .dr-kreisā{flex:1;}
+#drukas-lapa .dr-labā{width:212px;flex-shrink:0;text-align:center;}
+#drukas-lapa .dr-labā svg{width:196px;height:196px;}
+#drukas-lapa h4{font-size:15px;margin:0 0 8px;color:#2E74B5;letter-spacing:.02em;}
+#drukas-lapa .dr-jomas{list-style:none;margin:10px 0 0;padding:0;text-align:left;font-size:14px;}
+#drukas-lapa .dr-jomas li{display:flex;align-items:center;gap:7px;padding:2px 0;}
+#drukas-lapa .dr-jomas li i{width:11px;height:11px;border-radius:50%;display:inline-block;}
+#drukas-lapa .dr-jomas li b{margin-left:auto;}
+#drukas-lapa .dr-tukss{font-size:13px;color:#777;}
 #drukas-lapa table{width:100%;border-collapse:collapse;font-size:15px;}
 #drukas-lapa td{border:1px solid #999;padding:4px 10px;}
 #drukas-lapa td.l{width:90px;font-weight:700;}
@@ -492,6 +503,7 @@ h2{margin-bottom:2px;}
 @media print{.karjera{display:none !important;}}
 
 /* ---------- drukāšana ---------- */
+@page{margin:12mm;}
 @media print{
   body{background:#fff;padding:0;}
   .planshete{box-shadow:none;padding:10px;}
@@ -1106,7 +1118,14 @@ function zimetSferas(){
     `<span><i class="punkts" style="background:${j.h}"></i>${j.n}${radaSkaitlus?`<b>${stundaTeksts(st[k])} h</b>`:''}</span>`).join('');
 }
 
-function atjaunotApli(){ zimetApli(); zimetKopa(); zimetSferas(); }
+function atjaunotApli(){
+  zimetApli(); zimetKopa(); zimetSferas();
+  /* aplis pieder tam skolēnam, kura plāns šobrīd atvērts */
+  if(typeof klase!=='undefined' && aktīvais>=0 && klase[aktīvais]){
+    klase[aktīvais].a = aplis3.slice();
+    klase[aktīvais].l = pēdējaisLaiks;
+  }
+}
 function slēdzisPuses(){
   document.getElementById('rež-stunda').setAttribute('aria-pressed', String(!pusRežīms));
   document.getElementById('rež-puse').setAttribute('aria-pressed', String(pusRežīms));
@@ -1366,6 +1385,11 @@ function atvertSkolenu(i){
   aktīvais = i;
   document.getElementById('vārds4').value = klase[i].v;
   ieliktPlanu(klase[i].p);
+  /* līdzi pārslēdzas arī viņa 24 stundu aplis */
+  aplis3 = (klase[i].a || new Array(PUSES).fill(null)).slice();
+  pēdējaisLaiks = (klase[i].l !== undefined) ? klase[i].l : null;
+  zimetApli(); zimetKopa(); zimetSferas(); zimetPaplati3(); zimetPlanuSanos();
+  paziņot('');
   document.getElementById('galva4').textContent = `KO DARA — ${klase[i].v}`;
   ziņot4(`Atvērts: ${klase[i].v}. Pārlabo un spied «Saglabāt plānu».`);
   zimetKlasi(); zimetSkolēnuJoslu();
@@ -1377,10 +1401,11 @@ document.getElementById('saglabāt4').onclick = ()=>{
   const p = savaktPlanu();
   if(p.every(x=>!slotaKartes(x).length)){ ziņot4('Plāns ir tukšs — vispirms ieliec vismaz vienu kartīti.'); return; }
   const jau = klase.findIndex(sk=>sk.v.toLowerCase()===v.toLowerCase());
-  if(jau>=0){ klase[jau] = {v, p}; aktīvais = jau; ziņot4(`${v} plāns atjaunots.`); }
+  const a = aplis3.slice(), l = pēdējaisLaiks;
+  if(jau>=0){ klase[jau] = {v, p, a, l}; aktīvais = jau; ziņot4(`${v} plāns atjaunots.`); }
   else{
     if(klase.length>=MAKS_SKOLENI){ ziņot4(`Saraksts pilns — vairāk par ${MAKS_SKOLENI} plāniem neietilpst.`); return; }
-    klase.push({v,p}); aktīvais = klase.length-1; ziņot4(`${v} plāns saglabāts.`);
+    klase.push({v, p, a, l}); aktīvais = klase.length-1; ziņot4(`${v} plāns saglabāts.`);
   }
   document.getElementById('galva4').textContent = `KO DARA — ${v}`;
   zimetKlasi(); zimetSkolēnuJoslu();
@@ -1391,7 +1416,10 @@ document.getElementById('jauns4').onclick = ()=>{
   aktīvais = -1;
   document.getElementById('vārds4').value = '';
   document.getElementById('galva4').textContent = 'KO ES DARU';
-  zimetPlanu(); zimetKlasi(); zimetSkolēnuJoslu(); ziņot4('Tabula gatava nākamajam skolēnam.');
+  aplis3 = new Array(PUSES).fill(null); pēdējaisLaiks = null;
+  zimetApli(); zimetKopa(); zimetSferas(); zimetPaplati3();
+  zimetPlanu(); zimetKlasi(); zimetSkolēnuJoslu(); zimetPlanuSanos();
+  ziņot4('Tabula un aplis gatavi nākamajam skolēnam.');
   document.getElementById('vārds4').focus();
 };
 document.getElementById('notīrīt4').onclick = ()=>{ zimetPlanu(); ziņot4('Tabula notīrīta. Saglabātie klases plāni ir saglabāti.'); };
@@ -1400,7 +1428,12 @@ document.getElementById('dzēst4').onclick = ()=>{
   if(!confirm('Vai tiešām dzēst visus saglabātos klases plānus? Šo darbību nevar atsaukt.')) return;
   klase = []; aktīvais = -1; zimetKlasi(); zimetSkolēnuJoslu(); zimetSalidz(); ziņot4('Klases saraksts notīrīts.');
 };
-document.getElementById('drukāt4').onclick = ()=>{ document.body.classList.remove('druka-visi'); window.print(); };
+document.getElementById('drukāt4').onclick = ()=>{
+  const v = document.getElementById('vārds4').value.trim() || 'Mans plāns';
+  const p = savaktPlanu();
+  if(p.every(x=>!slotaKartes(x).length)){ ziņot4('Plāns ir tukšs — vispirms ieliec kartītes.'); return; }
+  drukāt([{v, p, a: aplis3.slice()}], 'Drukas logā izvēlies printeri vai «Saglabāt kā PDF».');
+};
 
 /* --- salīdzinājums --- */
 zimetLegendu(document.getElementById('leģenda4'));
@@ -1456,23 +1489,70 @@ function zimetSalidz(){
   }
 }
 
-/* --- visas klases PDF --- */
+/* --- drukas lapas: secība + aplis vienā lapā --- */
+function pulkstenisNoMasiva(masīvs){
+  const cx=100, cy=100, rSeja=38, iekš1=42, iekš2=64, ārā1=68, ārā2=92;
+  let g=`<circle cx="${cx}" cy="${cy}" r="${rSeja}" fill="#fff" stroke="#cfd8e0" stroke-width="1.5"/>`;
+  for(let n=1;n<=12;n++){
+    const a=(n*30-90)*Math.PI/180, r1=rSeja-6, r2=rSeja-1;
+    g += `<line x1="${cx+r1*Math.cos(a)}" y1="${cy+r1*Math.sin(a)}" x2="${cx+r2*Math.cos(a)}" y2="${cy+r2*Math.sin(a)}" stroke="#8d97a1" stroke-width="1.6"/>`;
+  }
+  [[12,0],[3,90],[6,180],[9,270]].forEach(([c,ā])=>{
+    const a=(ā-90)*Math.PI/180, rr=rSeja-14;
+    g += `<text x="${cx+rr*Math.cos(a)}" y="${cy+rr*Math.sin(a)+5}" text-anchor="middle" font-size="15" font-weight="700" fill="#5a6773">${c}</text>`;
+  });
+  const m = masīvs || [];
+  for(let i=0;i<48;i++){
+    const hh=Math.floor(i/2), puse=i%2, iekšā=hh<12;
+    const r1=iekšā?iekš1:ārā1, r2=iekšā?iekš2:ārā2;
+    const x=m[i], f = (x!=null) ? JOMAS[PLANS_KARTITES[x].j].h : (iekšā?'#eef2f6':'#e6ebef');
+    g += `<path d="${sektors(cx,cy,r1,r2,(hh%12)*30+puse*15,(hh%12)*30+puse*15+15)}" fill="${f}" stroke="${f}" stroke-width="0.4"/>`;
+  }
+  [[iekš1,iekš2],[ārā1,ārā2]].forEach(([r1,r2])=>{
+    g += `<circle cx="${cx}" cy="${cy}" r="${r1}" fill="none" stroke="#dbe2e8" stroke-width="1"/>`;
+    g += `<circle cx="${cx}" cy="${cy}" r="${r2}" fill="none" stroke="#dbe2e8" stroke-width="1"/>`;
+  });
+  g += `<line x1="${cx}" y1="${cy-iekš1}" x2="${cx}" y2="${cy-ārā2}" stroke="#8d97a1" stroke-width="1.4"/>`;
+  return `<svg viewBox="0 0 200 200">${g}</svg>`;
+}
+function jomuKopsavilkums(masīvs){
+  const s={macibas:0,pienakumi:0,hobiji:0,atputa:0,miegs:0};
+  (masīvs||[]).forEach(x=>{ if(x!=null) s[PLANS_KARTITES[x].j] += 0.5; });
+  const rindas = Object.entries(JOMAS).filter(([k])=>s[k]>0)
+    .map(([k,j])=>`<li><i style="background:${j.h}"></i>${j.n} <b>${stundaTeksts(s[k])} h</b></li>`).join('');
+  return rindas ? `<ul class="dr-jomas">${rindas}</ul>` : '<p class="dr-tukss">Laiks aplī vēl nav sadalīts.</p>';
+}
+function drukasLapa(sk){
+  const logoSrc = document.getElementById('logo').src;
+  return `<div class="sk-lapa">
+    <div class="dr-galva">
+      <img src="${logoSrc}" alt="">
+      <h3>Dienas režīms — ${sk.v}</h3>
+      <span class="datums">Datums: ____________</span>
+    </div>
+    <div class="dr-saturs">
+      <div class="dr-kreisā">
+        <h4>Mana dienas secība</h4>
+        <table>${LAIKI.map((l,i)=>({l, n:nosaukumiSlota(sk.p[i])})).filter(r=>r.n)
+          .map(r=>`<tr><td class="l">${r.l}</td><td>${r.n}</td></tr>`).join('')}</table>
+      </div>
+      <div class="dr-labā">
+        <h4>Mans 24 stundu laiks</h4>
+        ${pulkstenisNoMasiva(sk.a)}
+        ${jomuKopsavilkums(sk.a)}
+      </div>
+    </div>
+  </div>`;
+}
+function drukāt(saraksts, ziņa){
+  document.getElementById('drukas-lapa').innerHTML = saraksts.map(drukasLapa).join('');
+  document.body.classList.add('druka-visi');
+  ziņot4(ziņa);
+  window.print();
+}
 document.getElementById('pdf4').onclick = ()=>{
   if(!klase.length){ ziņot4('Nav neviena saglabāta plāna, ko saglabāt PDF failā.'); return; }
-  const logoSrc = document.getElementById('logo').src;
-  document.getElementById('drukas-lapa').innerHTML = klase.map(sk=>
-    `<div class="sk-lapa">
-       <div class="dr-galva">
-         <img src="${logoSrc}" alt="">
-         <h3>Dienas režīms — ${sk.v}</h3>
-         <span class="datums">Datums: ____________</span>
-       </div>
-       <table>${LAIKI.map((l,i)=>({l, n:nosaukumiSlota(sk.p[i])})).filter(r=>r.n)
-         .map(r=>`<tr><td class="l">${r.l}</td><td>${r.n}</td></tr>`).join('')}</table>
-     </div>`).join('');
-  document.body.classList.add('druka-visi');
-  ziņot4('Drukas logā izvēlies galamērķi «Saglabāt kā PDF».');
-  window.print();
+  drukāt(klase, 'Drukas logā izvēlies galamērķi «Saglabāt kā PDF».');
 };
 window.addEventListener('afterprint', ()=>document.body.classList.remove('druka-visi'));
 /* drošības tīkls, ja pārlūks nenosūta afterprint notikumu */
