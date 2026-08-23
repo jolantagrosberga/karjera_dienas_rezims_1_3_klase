@@ -588,7 +588,7 @@ h2{margin-bottom:2px;}
         <button class="ik-poga" aria-label="Ko tas nozīmē: 24 STUNDAS"><svg class="ik" aria-hidden="true"><use href="#i-saule"/></svg></button>
         <span class="v">24 STUNDAS</span>
         <div class="apraksts">
-          <p>Diennaktī ir 24 stundas — tik daudz laika ir katram, un vairāk nevar dabūt klāt.</p>
+          <p>Diennaktī ir 24 stundas — tik daudz laika ir katram un vairāk nevar dabūt klāt.</p>
           <button class="aizvērt">aizvērt</button>
         </div>
         <div class="prasme">
@@ -609,7 +609,7 @@ h2{margin-bottom:2px;}
         <button class="ik-poga" aria-label="Ko tas nozīmē: PA KĀRTAI"><svg class="ik" aria-hidden="true"><use href="#i-seciba"/></svg></button>
         <span class="v">PA KĀRTAI</span>
         <div class="apraksts">
-          <p>Dienas darbi notiek pēc kārtas, un pareizā secība palīdz visu paspēt.</p>
+          <p>Dienas darbi notiek pēc kārtas un pareizā secība palīdz visu paspēt.</p>
           <button class="aizvērt">aizvērt</button>
         </div>
         <div class="prasme">
@@ -723,7 +723,7 @@ h2{margin-bottom:2px;}
   <!-- ============ 3 ============ -->
   <section class="panelis" id="p3">
     <h2>24 stundu laiks</h2>
-    <p class="pamācība">Izvēlies kartīti un pieskaries aplim — tā tu piešķir tai laiku. Stunda dalās divās pusstundās: pārslēdz uz «30 minūtes». Ielikto noņem, pieskaroties vēlreiz.</p>
+    <p class="pamācība">Izvēlies kartīti un pieskaries aplim — tā tu tai piešķir laiku. Stunda dalās divās pusstundās: pārslēdz uz «30 minūtes». Ielikto noņem, pieskaroties vēlreiz.</p>
 
     <div class="laiks3">
       <div class="sleja-kreisā">
@@ -830,7 +830,7 @@ h2{margin-bottom:2px;}
       <svg aria-hidden="true"><use href="#i-karjera"/></svg>
       <div>
         <span class="v">KARJERAS IZGLĪTĪBA</span>
-        <span class="p"><b>Prasme: izveidot savu plānu un tam sekot.</b> Šo sauc par pašvadību — kad cilvēks pats zina, kas viņam šodien jāizdara, un nevienam tas nav jāatgādina. <b>Darba devēji to novērtē visaugstāk</b>, jo tavas patstāvīgā darba iemaņas sākās ar paša izveidotu dienas plānu.</span>
+        <span class="p"><b>Prasme: izveidot savu plānu un tam sekot.</b> Šo sauc par pašvadību — kad cilvēks pats zina, kas viņam šodien jāizdara un nevienam tas nav jāatgādina. <b>Darba devēji to novērtē visaugstāk</b>, jo tavas patstāvīgā darba iemaņas sākas ar paša izveidotu dienas plānu.</span>
       </div>
     </div>
     </details>
@@ -848,7 +848,7 @@ h2{margin-bottom:2px;}
       <svg aria-hidden="true"><use href="#i-karjera"/></svg>
       <div>
         <span class="v">KARJERAS IZGLĪTĪBA</span>
-        <span class="p"><b>Prasme: rūpēties par savu spēku.</b> Neviens darbs nav labi padarīts, ja cilvēks nav izgulējies un paēdis. Sportists, ugunsdzēsējs, ārsts — viņi visi zina savu darba spēka un atpūtas līdzsvaru. <b>Rūpes par sevi ir daļa no profesionalitātes.</b></span>
+        <span class="p"><b>Prasme: rūpēties par savu spēku.</b> Neviens darbs nav labi padarīts, ja cilvēks nav izgulējies un paēdis. Sportists, ugunsdzēsējs, ārsts — viņi visi zina sava darba un atpūtas līdzsvaru. <b>Rūpes par sevi ir daļa no profesionalitātes.</b></span>
       </div>
     </div>
     </details>
@@ -891,11 +891,11 @@ const JOMAS = {
 
 /* 24 stundas: sākuma stunda -> apraksts */
 const DIENNAKTS = [
-  {no:0,  lidz:7,  joma:'miegs',    nos:'Miegs',                 ik:'i-gulet',     t:'Naktī ķermenis atpūšas un aug. 1.–3. klases skolēnam vajag 10–11 stundas miega.'},
+  {no:0,  lidz:7,  joma:'miegs',    nos:'Miegs',                 ik:'i-gulet',     t:'Naktī ķermenis atpūšas un aug. 1.–3. klases skolēnam vajag 10–11 stundu miega.'},
   {no:7,  lidz:8,  joma:'pienakumi',nos:'Celšanās un rīta darbi',ik:'i-celties',   t:'Piecelties, saklāt gultu, nomazgāties, saģērbties un paēst brokastis.'},
   {no:8,  lidz:14, joma:'macibas',  nos:'Skola',                 ik:'i-skola',     t:'Mācību stundas skolā. Šis ir dienas galvenais darbs.'},
   {no:14, lidz:15, joma:'atputa',   nos:'Pusdienas un atelpa',   ik:'i-pusdienas', t:'Pēc skolas vajag paēst un mazliet atpūsties, pirms sāc mājas darbus.'},
-  {no:15, lidz:16, joma:'macibas',  nos:'Mājas darbi',           ik:'i-majasdarbi',t:'Mājas darbiem pietiek ar 30–60 minūtēm, ja strādā, netraucēts.'},
+  {no:15, lidz:16, joma:'macibas',  nos:'Mājas darbi',           ik:'i-majasdarbi',t:'Mājas darbiem pietiek ar 30–60 minūtēm, ja strādā netraucēti.'},
   {no:16, lidz:17, joma:'hobiji',   nos:'Pulciņš vai sports',    ik:'i-sports',    t:'Laiks tam, kas patīk: sports, mūzika, māksla, deja.'},
   {no:17, lidz:18, joma:'hobiji',   nos:'Rotaļas ārā',           ik:'i-ara',       t:'Katru dienu vismaz stundu jāizkustas svaigā gaisā.'},
   {no:18, lidz:19, joma:'pienakumi',nos:'Vakariņas un palīdzība',ik:'i-vakarinas', t:'Kopīgas vakariņas un mājas pienākumi: novākt galdu, sakārtot istabu.'},
@@ -1228,7 +1228,7 @@ document.getElementById('pārbaudīt3').onclick = ()=>{
   const piezīmes = [];
   if(trūkst.length) piezīmes.push(`aplī vēl nav: ${trūkst.join(', ')}`);
   if(stundas < 24) piezīmes.push(`neaizpildītas ${stundaTeksts(24-stundas)} stundas`);
-  if(stundas === 24 && miegs < 10) piezīmes.push('miegam atvēlēts par maz — vajag 10–11 stundas');
+  if(stundas === 24 && miegs < 10) piezīmes.push('miegam atvēlēts par maz — vajag 10–11 stundu');
   paziņot(piezīmes.length ? 'Vēl jāpaskatās: ' + piezīmes.join(' · ') + '.'
                           : '✓ Lieliski! Visa diena sadalīta un visas tavas darbības ir aplī.');
 };
@@ -1237,7 +1237,7 @@ document.getElementById('nakts3').onclick = ()=>{
   for(let i=44;i<48;i++) aplis3[i]=gulēt;     /* 22.00–24.00 */
   for(let i=0;i<14;i++)  aplis3[i]=gulēt;     /* 0.00–7.00 */
   pēdējaisLaiks = 14;
-  paziņot('Nakts no 22.00 līdz 7.00 aizpildīta. Ja tev citādi — noņem pa vienam lauciņam.');
+  paziņot('Nakts no 22.00 līdz 7.00 aizpildīta. Ja tev ir citādi — noņem pa vienam lauciņam.');
   atjaunotApli();
 };
 document.getElementById('notīrīt3').onclick = ()=>{ aplis3=new Array(PUSES).fill(null); pēdējaisLaiks=null; paziņot(''); atjaunotApli(); };
@@ -1404,7 +1404,7 @@ document.getElementById('saglabāt4').onclick = ()=>{
   const a = aplis3.slice(), l = pēdējaisLaiks;
   if(jau>=0){ klase[jau] = {v, p, a, l}; aktīvais = jau; ziņot4(`${v} plāns atjaunots.`); }
   else{
-    if(klase.length>=MAKS_SKOLENI){ ziņot4(`Saraksts pilns — vairāk par ${MAKS_SKOLENI} plāniem neietilpst.`); return; }
+    if(klase.length>=MAKS_SKOLENI){ ziņot4(`Saraksts pilns — vairāk par ${MAKS_SKOLENI} plāniem saglabāt nevar.`); return; }
     klase.push({v, p, a, l}); aktīvais = klase.length-1; ziņot4(`${v} plāns saglabāts.`);
   }
   document.getElementById('galva4').textContent = `KO DARA — ${v}`;
@@ -1422,7 +1422,7 @@ document.getElementById('jauns4').onclick = ()=>{
   ziņot4('Tabula un aplis gatavi nākamajam skolēnam.');
   document.getElementById('vārds4').focus();
 };
-document.getElementById('notīrīt4').onclick = ()=>{ zimetPlanu(); ziņot4('Tabula notīrīta. Saglabātie klases plāni ir saglabāti.'); };
+document.getElementById('notīrīt4').onclick = ()=>{ zimetPlanu(); ziņot4('Tabula notīrīta. Klases sarakstā saglabātie plāni paliek.'); };
 document.getElementById('dzēst4').onclick = ()=>{
   if(!klase.length) return;
   if(!confirm('Vai tiešām dzēst visus saglabātos klases plānus? Šo darbību nevar atsaukt.')) return;
@@ -1551,7 +1551,7 @@ function drukāt(saraksts, ziņa){
   window.print();
 }
 document.getElementById('pdf4').onclick = ()=>{
-  if(!klase.length){ ziņot4('Nav neviena saglabāta plāna, ko saglabāt PDF failā.'); return; }
+  if(!klase.length){ ziņot4('Nav neviena saglabāta plāna, ko ievietot PDF failā.'); return; }
   drukāt(klase, 'Drukas logā izvēlies galamērķi «Saglabāt kā PDF».');
 };
 window.addEventListener('afterprint', ()=>document.body.classList.remove('druka-visi'));
@@ -1617,16 +1617,16 @@ zimetNormas();
 const JAUT_KRAJUMS = [
   {t:'Mārtiņš iet gulēt plkst. 23.00 un ceļas plkst. 7.00. Vai viņš izguļas?',
    a:['Jā, pietiek','Nē, par maz'], p:1,
-   s:'Tās ir tikai 8 stundas. 1.–3. klases skolēnam vajag 10–11 stundas miega.', tema:'miegs'},
+   s:'Tās ir tikai 8 stundas. 1.–3. klases skolēnam vajag 10–11 stundu miega.', tema:'miegs'},
   {t:'Kad vislabāk pildīt mājas darbus?',
    a:['Tūlīt pēc pusdienām un atelpas','Vēlu vakarā pirms gulētiešanas'], p:0,
    s:'Vakarā smadzenes jau ir nogurušas. Pēcpusdienā darbs padodas ātrāk.', tema:'majasdarbi'},
   {t:'Cik ilgi katru dienu vajadzētu izkustēties svaigā gaisā?',
    a:['Pietiek ar 10 minūtēm','Vismaz 1 stundu'], p:1,
    s:'Vismaz stunda kustību dienā dod spēku un labu garastāvokli.', tema:'kustibas'},
-  {t:'Anna pēc skolas 3 stundas skatās video un tad sāk mājas darbus plkst. 21.00. Ko mainīt?',
+  {t:'Anna pēc skolas trīs stundas skatās video un tad sāk mājas darbus plkst. 21.00. Ko mainīt?',
    a:['Vispirms mājas darbi, tad ekrāns','Viss ir kārtībā'], p:0,
-   s:'Vispirms padara darbus, tad atpūšas. Ekrānam brīvajā laikā pietiek ar vienu stundu.', tema:'ekrans'},
+   s:'Vispirms padari darbus, tad atpūties. Ekrānam brīvajā laikā pietiek ar vienu stundu.', tema:'ekrans'},
   {t:'Kas ir dienas režīms?',
    a:['Kārtība, kādā dienā notiek darbi','Saraksts ar aizliegumiem'], p:0,
    s:'Dienas režīms palīdz paspēt visu: mācīties, palīdzēt mājās, darīt to, kas patīk, un atpūsties.', tema:'plans'},
@@ -1640,31 +1640,31 @@ const JAUT_KRAJUMS = [
    a:['1–2 reizes','4–5 reizes'], p:1,
    s:'Regulāras maltītes uztur spēku visu dienu.', tema:'edienreizes'},
   {t:'Jēkabs katru vakaru guļ dažādā laikā — reizēm 20.00, reizēm 23.00. Kas notiek?',
-   a:['Nekas, galvenais izgulēties nedēļas nogalē','Ķermenim grūti iemigt un no rīta ir grūti celties'], p:1,
+   a:['Nekas, galvenais — izgulēties nedēļas nogalē','Ķermenim grūti iemigt un no rīta ir grūti celties'], p:1,
    s:'Ķermenis pierod pie viena laika. Vienāds gulētiešanas laiks palīdz ātrāk iemigt.', tema:'miegs'},
   {t:'Kas palīdz vieglāk iemigt?',
    a:['Mierīga nodarbe un grāmata pirms miega','Spraiga spēle telefonā gultā'], p:0,
    s:'Ekrāna gaisma un aizraujoša spēle uzbudina — iemigt kļūst grūtāk.', tema:'miegs'},
   {t:'Lauras dienā nav ierakstīts neviens mājas pienākums. Vai tā ir laba diena?',
    a:['Jā, bērnam nekas nav jādara','Nē, arī bērnam ģimenē ir savi darbiņi'], p:1,
-   s:'15–30 minūtes palīdzības mājās ir dienas normāla daļa.', tema:'pienakumi'},
-  {t:'Cik ilgi mājas darbiem parasti vajadzētu 1.–3. klasē?',
+   s:'15–30 minūtes palīdzības mājās ir normāla dienas daļa.', tema:'pienakumi'},
+  {t:'Cik ilgi 1.–3. klasē parasti vajadzētu pildīt mājas darbus?',
    a:['30–60 minūtes','3 stundas'], p:0,
    s:'Ja darbi velkas ilgāk, parasti ir traucēkļi vai vajadzīga palīdzība.', tema:'majasdarbi'},
   {t:'Kas ir vaļasprieks?',
-   a:['Nodarbe, ko dari, jo tā patīk','Uzdevums, ko uzdod skolotājs'], p:0,
+   a:['Nodarbe, ko dari tāpēc, ka tā patīk','Uzdevums, ko uzdod skolotājs'], p:0,
    s:'Sports, mūzika, māksla, konstruēšana — katram savs.', tema:'valasprieki'},
-  {t:'Roberts pēc skolas uzreiz sēžas pie datora līdz vakariņām. Ko ieteiktu?',
+  {t:'Roberts pēc skolas uzreiz sēž pie datora līdz vakariņām. Ko tu viņam ieteiktu?',
    a:['Vispirms izkustēties ārā, tad citas lietas','Turpināt, tā ir laba atpūta'], p:0,
    s:'Pēc sēdēšanas skolā ķermenim vajag kustību, ne vēl vairāk sēdēšanas.', tema:'ekrans'},
   {t:'Kāpēc dienā vajag arī atpūtu, ne tikai darbus?',
-   a:['Lai smadzenes atgūst spēku','Lai diena paietu ātrāk'], p:0,
-   s:'Bez atelpas uzmanība krīt un darbs padodas lēnāk.', tema:'plans'},
+   a:['Lai smadzenes atgūtu spēku','Lai diena paietu ātrāk'], p:0,
+   s:'Bez atelpas uzmanība mazinās un darbs padodas lēnāk.', tema:'plans'},
   {t:'Elīza plāno dienā trīs pulciņus pēc kārtas līdz 20.00. Kas var notikt?',
    a:['Nepaliek laika mājas darbiem un atpūtai','Nekas, jo vairāk, jo labāk'], p:0,
-   s:'Arī labām lietām dienā ir robeža — 24 stundas nav vairāk.', tema:'plans'},
+   s:'Arī labām lietām dienā ir robeža — vairāk par 24 stundām nav.', tema:'plans'},
   {t:'Kurš rīts sākas mierīgāk?',
-   a:['Celties 10 minūtes pirms iziešanas','Celties tā, lai pietiek laika brokastīm un saģērbties'], p:1,
+   a:['Celties 10 minūtes pirms iziešanas','Celties tā, lai pietiek laika brokastīm un mierīgai saģērbšanai'], p:1,
    s:'Steiga no rīta rada nervozitāti visai dienai.', tema:'rits'},
   {t:'Ko nozīmē „ekrāna laiks”?',
    a:['Laiks, ko pavadi pie telefona, datora vai TV','Laiks, kad skolā ir projektors'], p:0,
@@ -1694,9 +1694,9 @@ function personīgieJaut(plāns){
       a:['Ekrāna gaisma traucē iemigt','Nekādi neietekmē'], p:0,
       s:'Pirms miega labāk der grāmata vai mierīga saruna — tad iemigt izdodas ātrāk.', tema:'miegs'});
   } else if(!gulēt.length && !KUR('Guļu').length){
-    j.push({t:'Tavā dienas secībā nav miega. Kas dienā nedrīkst iztrūkt?',
+    j.push({t:'Tavā dienas secībā nav miega. Kas dienā nedrīkst pietrūkt?',
       a:['Miegs — bez tā ķermenis neatpūšas','Miegu var izlaist, ja diena bijusi interesanta'], p:0,
-      s:'Miegs ir dienas garākā un svarīgākā daļa — 10–11 stundas.', tema:'miegs'});
+      s:'Miegs ir dienas garākā un svarīgākā daļa — 10–11 stundu.', tema:'miegs'});
   }
   if(!KUR('Ārā').length && !KUR('Sports').length){
     j.push({t:'Tavā dienas secībā nav ne sporta, ne laika ārā. Cik daudz kustību vajag katru dienu?',
@@ -1718,10 +1718,10 @@ function personīgieJaut(plāns){
   if(md.length && vak.length && md[0] > vak[0]){
     j.push({t:'Tavā secībā mājas darbi ir pēc vakariņām. Kad tos izdarīt vieglāk?',
       a:['Drīz pēc skolas, kamēr galva svaiga','Jo vēlāk, jo labāk'], p:0,
-      s:'Vakarā smadzenes ir nogurušas, un tas pats darbs prasa vairāk laika.', tema:'majasdarbi'});
+      s:'Vakarā smadzenes ir nogurušas un tas pats darbs prasa vairāk laika.', tema:'majasdarbi'});
   }
   if(!KUR('Mājas darbiņi').length){
-    j.push({t:'Tavā dienas secībā nav neviena mājas pienākuma. Cik daudz laika tiem parasti pietiek?',
+    j.push({t:'Tavā dienas secībā nav neviena mājas pienākuma. Cik daudz laika tiem parasti vajag?',
       a:['15–30 minūtes','Vesela diena'], p:0,
       s:'Arī neliela palīdzība mājās — galda noklāšana, istabas sakārtošana — ir dienas daļa.', tema:'pienakumi'});
   }
